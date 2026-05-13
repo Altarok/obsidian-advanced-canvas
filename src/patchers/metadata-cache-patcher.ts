@@ -96,14 +96,14 @@ class CanvasMetadataHandler {
       "changed", file, data, metadata
     )
 
-    const slowIndexingTimeout = activeWindow.setTimeout(() => {
+    const slowIndexingTimeout = window.setTimeout(() => {
       new Notice(`Canvas indexing taking a long time for file ${file.path}`)
     }, 10000)
 
     try {
       metadata = await CanvasMetadataHandler.computeCanvasMetadataAsync.call(this, data)
     } finally {
-      activeWindow.clearTimeout(slowIndexingTimeout)
+      window.clearTimeout(slowIndexingTimeout)
     }
 
     if (metadata) {
