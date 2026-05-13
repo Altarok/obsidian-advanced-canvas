@@ -51,61 +51,51 @@ class CanvasSearchView {
   }
 
   private createSearchView() {
-    this.containerEl = activeDocument.createDiv()
+    this.containerEl = this.view.canvas.wrapperEl.createDiv()
     this.containerEl.className = "document-search-container"
 
-    const documentSearch = activeDocument.createDiv()
+    const documentSearch = this.containerEl.createDiv()
     documentSearch.className = "document-search"
-    this.containerEl.appendChild(documentSearch)
 
-    const searchInputContainer = activeDocument.createDiv()
+    const searchInputContainer = documentSearch.createDiv()
     searchInputContainer.className = "search-input-container document-search-input"
-    documentSearch.appendChild(searchInputContainer)
 
-    this.searchInput = activeDocument.createEl("input")
+    this.searchInput = searchInputContainer.createEl("input")
     this.searchInput.type = "text"
     this.searchInput.placeholder = "Find..."
     this.searchInput.addEventListener("keydown", (e: KeyboardEvent) => this.onKeyDown(e))
     this.searchInput.addEventListener("input", () => this.onInput())
-    searchInputContainer.appendChild(this.searchInput)
 
-    this.searchCount = activeDocument.createDiv()
+    this.searchCount = searchInputContainer.createDiv()
     this.searchCount.className = "document-search-count"
     this.searchCount.style.display = "none" /* eslint-disable-line obsidianmd/no-static-styles-assignment */
     this.searchCount.textContent = "0 / 0"
-    searchInputContainer.appendChild(this.searchCount)
 
-    const documentSearchButtons = activeDocument.createDiv()
+    const documentSearchButtons = documentSearch.createDiv()
     documentSearchButtons.className = "document-search-buttons"
-    documentSearch.appendChild(documentSearchButtons)
 
-    const previousButton = activeDocument.createEl("button")
+    const previousButton = documentSearchButtons.createEl("button")
     previousButton.className = "clickable-icon document-search-button"
     previousButton.setAttribute("aria-label", "Previous\nShift + F3")
     previousButton.setAttribute("data-tooltip-position", "top")
     setIcon(previousButton, "arrow-up")
     previousButton.addEventListener("click", () => this.changeMatch(this.matchIndex - 1))
-    documentSearchButtons.appendChild(previousButton)
 
-    const nextButton = activeDocument.createEl("button")
+    const nextButton = documentSearchButtons.createEl("button")
     nextButton.className = "clickable-icon document-search-button"
     nextButton.setAttribute("aria-label", "Next\nF3")
     nextButton.setAttribute("data-tooltip-position", "top")
     setIcon(nextButton, "arrow-down")
     nextButton.addEventListener("click", () => this.changeMatch(this.matchIndex + 1))
-    documentSearchButtons.appendChild(nextButton)
 
-    const closeButton = activeDocument.createEl("button")
+    const closeButton = documentSearch.createEl("button")
     closeButton.className = "clickable-icon document-search-close-button"
     closeButton.setAttribute("aria-label", "Exit search")
     closeButton.setAttribute("data-tooltip-position", "top")
     setIcon(closeButton, "x")
     closeButton.addEventListener("click", () => this.close())
-    documentSearch.appendChild(closeButton)
 
-    this.view.canvas.wrapperEl.appendChild(this.containerEl)
     this.view.canvas.searchEl = this.containerEl
-
     this.searchInput.focus()
   }
 

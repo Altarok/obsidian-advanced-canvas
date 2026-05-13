@@ -59,7 +59,8 @@ export default class CollapsibleGroupsCanvasExtension extends CanvasExtension {
     groupNode.collapseEl?.remove()
 
     // Add collapse/expand button next to the label
-    const collapseEl = activeDocument.createSpan()
+    /* eslint-disable-next-line obsidianmd/prefer-create-el */
+    const collapseEl = activeDocument.createElement('div')
     collapseEl.className = 'collapse-button'
     setIcon(collapseEl, groupNodeData.collapsed ? 'plus-circle' : 'minus-circle')
 

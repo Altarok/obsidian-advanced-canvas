@@ -334,7 +334,8 @@ export default class ExportCanvasExtension extends CanvasExtension {
         if (!isWholeCanvas) baseFilename += ` - Selection of ${nodesToExport.length}`
         const filename = `${baseFilename}.${svg ? 'svg' : 'png'}`
 
-        const downloadEl = activeDocument.createEl('a')
+        /* eslint-disable-next-line obsidianmd/prefer-create-el */
+        const downloadEl = activeDocument.createElement('a')
         downloadEl.href = imageDataUri
         downloadEl.download = filename
         downloadEl.click()
@@ -365,33 +366,28 @@ export default class ExportCanvasExtension extends CanvasExtension {
 
   private getInteractionBlocker() {
     // Progress bar (like when loading the workspace)
-    const interactionBlocker = activeDocument.createDiv()
+    /* eslint-disable-next-line obsidianmd/prefer-create-el */
+    const interactionBlocker = activeDocument.createElement('div')
     interactionBlocker.classList.add('progress-bar-container')
 
-    const progressBar = activeDocument.createDiv()
+    const progressBar = interactionBlocker.createDiv()
     progressBar.classList.add('progress-bar')
-    interactionBlocker.appendChild(progressBar)
 
-    const progressBarMessage = activeDocument.createDiv()
+    const progressBarMessage = progressBar.createDiv()
     progressBarMessage.classList.add('progress-bar-message', 'u-center-text')
     progressBarMessage.innerText = 'Generating image...'
-    progressBar.appendChild(progressBarMessage)
 
-    const progressBarIndicator = activeDocument.createDiv()
+    const progressBarIndicator = progressBar.createDiv()
     progressBarIndicator.classList.add('progress-bar-indicator')
-    progressBar.appendChild(progressBarIndicator)
 
-    const progressBarLine = activeDocument.createDiv()
+    const progressBarLine = progressBarIndicator.createDiv()
     progressBarLine.classList.add('progress-bar-line')
-    progressBarIndicator.appendChild(progressBarLine)
 
-    const progressBarSublineIncrease = activeDocument.createDiv()
+    const progressBarSublineIncrease = progressBarIndicator.createDiv()
     progressBarSublineIncrease.classList.add('progress-bar-subline', 'mod-increase')
-    progressBarIndicator.appendChild(progressBarSublineIncrease)
 
-    const progressBarSublineDecrease = activeDocument.createDiv()
+    const progressBarSublineDecrease = progressBarIndicator.createDiv()
     progressBarSublineDecrease.classList.add('progress-bar-subline', 'mod-decrease')
-    progressBarIndicator.appendChild(progressBarSublineDecrease)
 
     return interactionBlocker
   }
@@ -411,7 +407,9 @@ export default class ExportCanvasExtension extends CanvasExtension {
     // Enlarge the bounding box in the bottom
     bbox.maxY += height + watermarkPadding.y
 
-    const watermarkEl = activeDocument.createSvg("svg")
+
+    /* eslint-disable-next-line obsidianmd/prefer-create-el */
+    const watermarkEl = activeDocument.createElementNS('http://www.w3.org/2000/svg', 'svg')
     watermarkEl.id = 'watermark-ac'
     watermarkEl.style.transform = `translate(${bbox.minX + watermarkPadding.x}px, ${bbox.maxY - height - watermarkPadding.y}px)`
 

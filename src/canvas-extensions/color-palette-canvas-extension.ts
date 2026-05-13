@@ -80,7 +80,8 @@ export default class ColorPaletteCanvasExtension extends CanvasExtension {
   }
 
   private createColorMenuItem(canvas: Canvas, colorId: string) {
-    const menuItem = activeDocument.createDiv()
+    /* eslint-disable-next-line obsidianmd/prefer-create-el */
+    const menuItem = activeDocument.createElement('div')
     menuItem.classList.add('canvas-color-picker-item')
     menuItem.classList.add(`mod-canvas-color-${colorId}`)
 
