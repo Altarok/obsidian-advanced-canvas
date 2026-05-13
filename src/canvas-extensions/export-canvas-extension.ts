@@ -334,7 +334,7 @@ export default class ExportCanvasExtension extends CanvasExtension {
         if (!isWholeCanvas) baseFilename += ` - Selection of ${nodesToExport.length}`
         const filename = `${baseFilename}.${svg ? 'svg' : 'png'}`
 
-        /* eslint-disable-next-line obsidianmd/prefer-create-el */
+        /* eslint-disable-next-line obsidianmd/prefer-create-el -- So we can return it */
         const downloadEl = activeDocument.createElement('a')
         downloadEl.href = imageDataUri
         downloadEl.download = filename
@@ -366,7 +366,7 @@ export default class ExportCanvasExtension extends CanvasExtension {
 
   private getInteractionBlocker() {
     // Progress bar (like when loading the workspace)
-    /* eslint-disable-next-line obsidianmd/prefer-create-el */
+    /* eslint-disable-next-line obsidianmd/prefer-create-el -- So we can return it */
     const interactionBlocker = activeDocument.createElement('div')
     interactionBlocker.classList.add('progress-bar-container')
 
@@ -408,7 +408,7 @@ export default class ExportCanvasExtension extends CanvasExtension {
     bbox.maxY += height + watermarkPadding.y
 
 
-    /* eslint-disable-next-line obsidianmd/prefer-create-el */
+    /* eslint-disable-next-line obsidianmd/prefer-create-el -- So we can return it */
     const watermarkEl = activeDocument.createElementNS('http://www.w3.org/2000/svg', 'svg')
     watermarkEl.id = 'watermark-ac'
     watermarkEl.style.transform = `translate(${bbox.minX + watermarkPadding.x}px, ${bbox.maxY - height - watermarkPadding.y}px)`

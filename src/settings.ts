@@ -783,7 +783,7 @@ export class AdvancedCanvasPluginSettingTab extends PluginSettingTab {
       .setName(setting.label)
       .setDesc(setting.description)
       .addText(text => text
-        .setValue(this.settingsManager.getSetting(settingId).toString())
+        .setValue(JSON.stringify(this.settingsManager.getSetting(settingId)))
         .onChange(async (value) => {
           await this.settingsManager.setSetting({ [settingId]: setting.parse(value) })
         })

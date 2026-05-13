@@ -93,7 +93,7 @@ export default class DebugHelper {
     })
 
     if (duration >= 0) {
-      setTimeout(() => {
+      window.setTimeout(() => {
         canvas.removeNode(node)
       }, duration)
     }

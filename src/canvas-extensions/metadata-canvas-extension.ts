@@ -26,13 +26,13 @@ export default class MetadataCanvasExtension extends CanvasExtension {
   }
 
   private onCanvasChanged(canvas: Canvas) {
-    /* eslint-disable-next-line @typescript-eslint/no-deprecated */
+    /* eslint-disable-next-line @typescript-eslint/no-deprecated -- It's my lint and I know the consequences */
     const metadata = canvas.data?.metadata
     if (!metadata || metadata.version !== CURRENT_SPEC_VERSION)
       return new Notice("Metadata node not found or version mismatch. Should have been migrated (but wasn't).")
 
     // Add proxy to metadata to listen for changes
-    const that = this
+    const that = this // eslint-disable-line @typescript-eslint/no-this-alias -- For patcher
     const validator = {
       get(target: any, key: string): any {
         if (typeof target[key] === 'object' && target[key] !== null)

@@ -5,7 +5,7 @@ export default class FileManagerPatcher extends Patcher {
   protected async patch() {
     if (!this.plugin.settings.getSetting('canvasMetadataCompatibilityEnabled')) return
 
-    const that = this
+    const that = this // eslint-disable-line @typescript-eslint/no-this-alias -- For patcher
     Patcher.patch(this.plugin, this.plugin.app.fileManager, {
       processFrontMatter: Patcher.OverrideExisting(next => async function (file: TFile, fn: (frontmatter: any) => void, options?: DataWriteOptions) {
         // Check if the file is a canvas file

@@ -29,7 +29,7 @@ export default class CanvasHelper {
   }
 
   static createControlMenuButton(menuOption: MenuOption): HTMLElement {
-    /* eslint-disable-next-line obsidianmd/prefer-create-el */
+    /* eslint-disable-next-line obsidianmd/prefer-create-el -- So we can return it */
     const quickSetting = activeDocument.createElement("div")
     if (menuOption.id) quickSetting.id = menuOption.id
     quickSetting.classList.add('canvas-control-item')
@@ -46,7 +46,7 @@ export default class CanvasHelper {
   }
 
   static createCardMenuOption(canvas: Canvas, menuOption: MenuOption, previewNodeSize: () => Size, onPlaced: (canvas: Canvas, pos: Position) => void): HTMLElement {
-    /* eslint-disable-next-line obsidianmd/prefer-create-el */
+    /* eslint-disable-next-line obsidianmd/prefer-create-el -- So we can return it */
     const menuOptionElement = activeDocument.createElement("div")
     if (menuOption.id) menuOptionElement.id = menuOption.id
     menuOptionElement.classList.add('canvas-card-menu-button')
@@ -74,7 +74,7 @@ export default class CanvasHelper {
   }
 
   static createPopupMenuOption(menuOption: MenuOption): HTMLElement {
-    /* eslint-disable-next-line obsidianmd/prefer-create-el */
+    /* eslint-disable-next-line obsidianmd/prefer-create-el -- So we can return it */
     const menuOptionElement = activeDocument.createElement('button')
     if (menuOption.id) menuOptionElement.id = menuOption.id
     menuOptionElement.classList.add('clickable-icon')
@@ -249,8 +249,8 @@ export default class CanvasHelper {
       styleMenuDropdownElement.classList.add('menu')
 
       // Position correctly
-      styleMenuDropdownElement.style.position = 'absolute' /* eslint-disable-line obsidianmd/no-static-styles-assignment */
-      styleMenuDropdownElement.style.maxHeight = 'initial' /* eslint-disable-line obsidianmd/no-static-styles-assignment */
+      styleMenuDropdownElement.style.position = 'absolute' /* eslint-disable-line obsidianmd/no-static-styles-assignment -- Should be dynamic */
+      styleMenuDropdownElement.style.maxHeight = 'initial' /* eslint-disable-line obsidianmd/no-static-styles-assignment -- Should be dynamic */
 
       styleMenuDropdownElement.style.top = `${popupMenuElement.getBoundingClientRect().height}px`
 
@@ -310,8 +310,8 @@ export default class CanvasHelper {
           styleMenuDropdownSubmenuElement.classList.add('menu')
 
           // Position correctly
-          styleMenuDropdownSubmenuElement.style.position = 'absolute' /* eslint-disable-line obsidianmd/no-static-styles-assignment */
-          styleMenuDropdownSubmenuElement.style.maxHeight = 'initial' /* eslint-disable-line obsidianmd/no-static-styles-assignment */
+          styleMenuDropdownSubmenuElement.style.position = 'absolute' /* eslint-disable-line obsidianmd/no-static-styles-assignment -- Should be dynamic */
+          styleMenuDropdownSubmenuElement.style.maxHeight = 'initial' /* eslint-disable-line obsidianmd/no-static-styles-assignment -- Should be dynamic */
 
           const topOffset = parseFloat(window.getComputedStyle(styleMenuDropdownElement).getPropertyValue('padding-top')) + (styleMenuDropdownElement.offsetHeight - styleMenuDropdownElement.clientHeight) / 2
           styleMenuDropdownSubmenuElement.style.top = `${stylableAttributeElement.getBoundingClientRect().top - topOffset - popupMenuElement.getBoundingClientRect().top}px`
@@ -366,7 +366,7 @@ export default class CanvasHelper {
   }
 
   static createDropdownOptionElement(menuOption: MenuOption): HTMLElement {
-    /* eslint-disable-next-line obsidianmd/prefer-create-el */
+    /* eslint-disable-next-line obsidianmd/prefer-create-el -- So we can return it */
     const menuDropdownOptionElement = activeDocument.createElement('div')
     menuDropdownOptionElement.classList.add('menu-item')
     menuDropdownOptionElement.classList.add('tappable')
@@ -399,7 +399,7 @@ export default class CanvasHelper {
   }
 
   static createDropdownSeparatorElement(): HTMLElement {
-    /* eslint-disable-next-line obsidianmd/prefer-create-el */
+    /* eslint-disable-next-line obsidianmd/prefer-create-el -- So we can return it */
     const separatorElement = activeDocument.createElement('div')
     separatorElement.classList.add('menu-separator')
 

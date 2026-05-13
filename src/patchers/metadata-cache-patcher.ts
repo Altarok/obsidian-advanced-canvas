@@ -15,13 +15,14 @@ export default class MetadataCachePatcher extends Patcher {
       getCache: Patcher.OverrideExisting(next => function (filepath: string, ...args: any[]): ExtendedCachedMetadata | null {
         // Bypass the "md" extension check by handling the "canvas" extension here
         if (FilepathHelper.extension(filepath) === 'canvas') {
-          if (!this.fileCache.hasOwnProperty(filepath)) return null
+          if (!Object.prototype.hasOwnProperty.call(this.fileCache, filepath))
+            return null
 
-          const hash = this.fileCache[filepath].hash
-          return this.metadataCache[hash] || null
+          const hash = this.fileCache[filepath]?.hash
+          return (hash && this.metadataCache[hash]) || null
         }
 
-        return next.call(this, filepath, ...args)
+        return next.call(this, filepath, ...args) as ExtendedCachedMetadata
       }),
       computeFileMetadataAsync: Patcher.OverrideExisting(next => async function (file: TFile, ...args: any[]) {
         if (file instanceof TFile && file?.extension === 'canvas')
@@ -52,13 +53,11 @@ class CanvasMetadataHandler {
 
     // Check if cache is stale
     let isStale = true
-    if (!this.fileCache.hasOwnProperty(file.path))
-      this.saveFileCache(file.path, { mtime: 0, size: 0, hash: "" })
+    const cache = this.fileCache[file.path]
+    if (!cache) this.saveFileCache(file.path, { mtime: 0, size: 0, hash: "" })
     else {
-      const cache = this.fileCache[file.path]
-
       const unchanged = cache.mtime === file.stat.mtime && cache.size === file.stat.size
-      const hasMetadataCache = cache.hash && this.metadataCache.hasOwnProperty(cache.hash)
+      const hasMetadataCache = cache.hash && Object.prototype.hasOwnProperty.call(this.metadataCache, cache.hash)
 
       if (unchanged && hasMetadataCache)
         isStale = false
@@ -138,7 +137,7 @@ class CanvasMetadataHandler {
         return {
           key: key,
           displayText: aliases.length > 0 ? aliases.join('|') : link,
-          link: link,
+          link: link ?? v,
           original: v
         } satisfies FrontmatterLinkCache
       }).filter((v) => v !== null) as FrontmatterLinkCache[]

@@ -7,7 +7,7 @@ export default class SearchCommandPatcher extends Patcher {
   protected async patch() {
     if (!this.plugin.settings.getSetting('nativeFileSearchEnabled')) return
 
-    const that = this
+    const that = this // eslint-disable-line @typescript-eslint/no-this-alias -- For patcher
     Patcher.patch(this.plugin, this.plugin.app.commands.commands["editor:open-search"], {
       checkCallback: Patcher.OverrideExisting(next => function (this: any, checking: boolean) {
         // If there is an active md editor, return the original method
@@ -68,7 +68,7 @@ class CanvasSearchView {
 
     this.searchCount = searchInputContainer.createDiv()
     this.searchCount.className = "document-search-count"
-    this.searchCount.style.display = "none" /* eslint-disable-line obsidianmd/no-static-styles-assignment */
+    this.searchCount.style.display = "none" /* eslint-disable-line obsidianmd/no-static-styles-assignment -- Should be dynamic */
     this.searchCount.textContent = "0 / 0"
 
     const documentSearchButtons = documentSearch.createDiv()

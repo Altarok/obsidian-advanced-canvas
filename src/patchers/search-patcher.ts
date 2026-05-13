@@ -5,7 +5,7 @@ export default class SearchPatcher extends Patcher {
   protected async patch() {
     if (!this.plugin.settings.getSetting('canvasMetadataCompatibilityEnabled')) return
 
-    const that = this
+    const that = this // eslint-disable-line @typescript-eslint/no-this-alias -- For patcher
     await Patcher.waitForViewRequest<SearchView>(this.plugin, "search", view => {
       // Patch the search view until the searchQuery is set or the plugin is unloaded
       const uninstallers: (() => void)[] = []

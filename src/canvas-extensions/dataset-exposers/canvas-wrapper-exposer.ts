@@ -37,7 +37,7 @@ export default class CanvasWrapperExposerExtension extends CanvasExtension {
     if (!canvas) return
 
     for (const setting of EXPOSED_SETTINGS) {
-      canvas.wrapperEl.dataset[setting] = this.plugin.settings.getSetting(setting).toString()
+      canvas.wrapperEl.dataset[setting] = JSON.stringify(this.plugin.settings.getSetting(setting))
     }
   }
 }
