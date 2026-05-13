@@ -3,7 +3,6 @@ import * as obsidian from "obsidian"
 import { CustomWorkspaceEvents } from "./CustomWorkspaceEvents"
 import SuggestManager from "./SuggestManager"
 
-
 export * from "obsidian"
 declare module "obsidian" {
   export default interface App {
