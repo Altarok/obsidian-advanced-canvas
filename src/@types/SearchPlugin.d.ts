@@ -1,4 +1,4 @@
-import { App, CachedMetadata } from "./Obsidian"
+import App, { CachedMetadata } from "obsidian"
 
 export default interface SearchView {
   searchQuery: SearchQuery
