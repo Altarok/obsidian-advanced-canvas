@@ -35,7 +35,7 @@ export default abstract class Patcher {
 
   constructor(plugin: AdvancedCanvasPlugin) {
     this.plugin = plugin
-    this.patch()
+    void this.patch()
   }
 
   protected abstract patch(): Promise<void>

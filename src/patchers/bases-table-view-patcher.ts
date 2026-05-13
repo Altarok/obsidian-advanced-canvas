@@ -8,7 +8,7 @@ export default class BasesTableViewPatcher extends Patcher {
     const bases: BasesPlugin = this.plugin.app.internalPlugins.getEnabledPluginById("bases")
     if (!bases) return // Core plugin not enabled
 
-    this.patchViewFactory(bases)
+    void this.patchViewFactory(bases)
   }
 
   private async patchViewFactory(bases: BasesPlugin) {
@@ -18,7 +18,7 @@ export default class BasesTableViewPatcher extends Patcher {
       factory: Patcher.OverrideExisting(next => function (...args: any): BasesTableView {
         const view = next.call(this, ...args)
 
-        that.patchTableView(view)
+        void that.patchTableView(view)
         resolve(view)
 
         return view
@@ -36,7 +36,7 @@ export default class BasesTableViewPatcher extends Patcher {
         if (this.rows.length > 0) {
           const row = this.rows.first()!
 
-          that.patchTableRow(row)
+          void that.patchTableRow(row)
           resolve(row)
         }
 
@@ -55,7 +55,7 @@ export default class BasesTableViewPatcher extends Patcher {
         if (this.cells.length > 0) {
           const cell = this.cells.first()!
 
-          that.patchTableCell(cell)
+          void that.patchTableCell(cell)
           resolve(cell)
 
           // Re-render the first cell

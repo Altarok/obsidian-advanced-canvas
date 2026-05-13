@@ -18,7 +18,7 @@ export default class FileManagerPatcher extends Patcher {
 
             // Save changes
             return JSON.stringify(content, null, 2)
-          })
+          }).catch(() => console.error("Failed to update metadata object in canvas file."))
 
           return
         }

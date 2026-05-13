@@ -35,7 +35,7 @@ export default class MetadataCachePatcher extends Patcher {
 
         // Run custom logic that triggers 'resolve' and 'resolved' events
         if (FilepathHelper.extension(filepath) === 'canvas')
-          CanvasMetadataHandler.resolveCanvasLinks.call(this, filepath)
+          await CanvasMetadataHandler.resolveCanvasLinks.call(this, filepath)
 
         return result
       })

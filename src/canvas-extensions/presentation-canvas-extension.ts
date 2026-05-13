@@ -335,7 +335,7 @@ export default class PresentationCanvasExtension extends CanvasExtension {
     const startNode = canvas.nodes.get(startNodeId)
     if (!startNode) return
 
-    this.animateNodeTransition(canvas, undefined, startNode)
+    void this.animateNodeTransition(canvas, undefined, startNode)
   }
 
   private endPresentation(canvas: Canvas) {
@@ -348,7 +348,7 @@ export default class PresentationCanvasExtension extends CanvasExtension {
       canvas.wrapperEl.onfullscreenchange = null
 
       // Exit fullscreen mode
-      if (activeDocument.fullscreenElement) activeDocument.exitFullscreen()
+      if (activeDocument.fullscreenElement) void activeDocument.exitFullscreen()
     }
     canvas.wrapperEl.onkeydown = null
 
@@ -397,15 +397,15 @@ export default class PresentationCanvasExtension extends CanvasExtension {
 
       // Select next edge
       const nextEdge = sortedEdges[traversedEdgesCount]
-      toNode = nextEdge.to.node
+      toNode = nextEdge?.to?.node
     }
 
     if (toNode) {
       this.visitedNodeIds.push(toNode.getData().id)
-      this.animateNodeTransition(canvas, fromNode, toNode)
+      void this.animateNodeTransition(canvas, fromNode, toNode)
     } else {
       // No more nodes left, animate to same node
-      this.animateNodeTransition(canvas, fromNode, fromNode)
+      void this.animateNodeTransition(canvas, fromNode, fromNode)
     }
   }
 
@@ -425,6 +425,6 @@ export default class PresentationCanvasExtension extends CanvasExtension {
       this.visitedNodeIds.push(fromNodeId)
     }
 
-    this.animateNodeTransition(canvas, fromNode, toNode)
+    void this.animateNodeTransition(canvas, fromNode, toNode)
   }
 }

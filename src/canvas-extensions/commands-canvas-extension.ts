@@ -189,7 +189,7 @@ export default class CommandsCanvasExtension extends CanvasExtension {
       checkCallback: CanvasHelper.canvasCommand(
         this.plugin,
         (canvas: Canvas) => !canvas.readonly && canvas.selection.size === 1,
-        (canvas: Canvas) => {
+        async (canvas: Canvas) => {
           const file = canvas.view.file
           if (!file) return
 
@@ -197,7 +197,7 @@ export default class CommandsCanvasExtension extends CanvasExtension {
           if (!nodeData) return
 
           const wikilink = `[[${file.path}#${nodeData.id}|${file.name} (${TextHelper.toTitleCase(nodeData.type)} node)]]`
-          navigator.clipboard.writeText(wikilink)
+          await navigator.clipboard.writeText(wikilink)
 
           new Notice("Copied wikilink to node to clipboard.", 2000)
         }
@@ -253,7 +253,7 @@ export default class CommandsCanvasExtension extends CanvasExtension {
 
           for (const outgoingLink of outgoingLinks) {
             if (existingFileNodes.has(outgoingLink)) continue
-            this.createFileNode(canvas, outgoingLink)
+            void this.createFileNode(canvas, outgoingLink)
           }
         }
       )
@@ -312,7 +312,7 @@ export default class CommandsCanvasExtension extends CanvasExtension {
 
           for (const backlink of backlinks) {
             if (existingFileNodes.has(backlink)) continue
-            this.createFileNode(canvas, backlink)
+            void this.createFileNode(canvas, backlink)
           }
         }
       )

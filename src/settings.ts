@@ -869,7 +869,7 @@ export class AdvancedCanvasPluginSettingTab extends PluginSettingTab {
     }
   }
 
-  private async createKofiBanner(containerEl: HTMLElement) {
+  private createKofiBanner(containerEl: HTMLElement) {
     const banner = containerEl.createDiv()
     banner.classList.add('kofi-banner')
 

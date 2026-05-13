@@ -147,7 +147,7 @@ export default class ExportCanvasExtension extends CanvasExtension {
         .onClick(async () => {
           modal.close()
 
-          this.exportImage(
+          await this.exportImage(
             canvas,
             nodesToExport,
             svg,
