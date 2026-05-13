@@ -34,7 +34,10 @@ jobs:
       - name: Generate artifact attestation
         uses: actions/attest@v4
         with:
-          subject-path: 'dist/main.js dist/styles.css dist/manifest.json'
+          subject-path: |
+            dist/main.js
+            dist/styles.css
+            dist/manifest.json
 
       - name: Upload Release Assets (Original Names)
         uses: softprops/action-gh-release@v1
