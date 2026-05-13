@@ -105,7 +105,7 @@ export default abstract class Patcher {
       }
     }
 
-    const uninstaller = around(target as any, patches)
+    const uninstaller = around(target, patches)
     if (uninstallers) uninstallers.push(uninstaller)
     plugin.register(uninstaller)
 

@@ -60,7 +60,7 @@ export default class PresentationCanvasExtension extends CanvasExtension {
       checkCallback: CanvasHelper.canvasCommand(
         this.plugin,
         (_canvas: Canvas) => !this.isPresentationMode,
-        (canvas: Canvas) => this.startPresentation(canvas)
+        (canvas: Canvas) => void this.startPresentation(canvas)
       )
     })
 
@@ -70,7 +70,7 @@ export default class PresentationCanvasExtension extends CanvasExtension {
       checkCallback: CanvasHelper.canvasCommand(
         this.plugin,
         (_canvas: Canvas) => !this.isPresentationMode,
-        (canvas: Canvas) => this.startPresentation(canvas, true)
+        (canvas: Canvas) => void this.startPresentation(canvas, true)
       )
     })
 
@@ -216,7 +216,6 @@ export default class PresentationCanvasExtension extends CanvasExtension {
 
     const toNodeBBox = CanvasHelper.getSmallestAllowedZoomBBox(canvas, toNode.getBBox())
     const toNodeBBoxPadded = removePadding ? toNodeBBox : BBoxHelper.enlargeBBox(toNodeBBox, 50)
-    console.log({ toNodeBBox, toNodeBBoxPadded })
 
     if (animationDurationMs > 0 && fromNode) {
       const animationIntensity = this.plugin.settings.getSetting('slideTransitionAnimationIntensity')
@@ -259,7 +258,7 @@ export default class PresentationCanvasExtension extends CanvasExtension {
       zoom: canvas.tZoom,
     }
 
-    const shouldEnterFullscreen = this.plugin.settings.getSetting('fullscreenPresentationEnabled') as boolean
+    const shouldEnterFullscreen = this.plugin.settings.getSetting('fullscreenPresentationEnabled')
     this.presentationUsesFullscreen = shouldEnterFullscreen
 
     canvas.wrapperEl.focus()
@@ -306,19 +305,19 @@ export default class PresentationCanvasExtension extends CanvasExtension {
       this.fullscreenModalObserver = new MutationObserver((mutationRecords) => {
         mutationRecords.forEach((mutationRecord) => {
           mutationRecord.addedNodes.forEach((node) => {
-            document.body.removeChild(node)
-            document.fullscreenElement?.appendChild(node)
+            activeDocument.body.removeChild(node)
+            activeDocument.fullscreenElement?.appendChild(node)
           })
         })
 
-        const inputField = document.querySelector('.prompt-input') as HTMLInputElement | null
+        const inputField = activeDocument.querySelector('.prompt-input') as HTMLInputElement
         if (inputField) inputField.focus()
       })
-      this.fullscreenModalObserver.observe(document.body, { childList: true })
+      this.fullscreenModalObserver.observe(activeDocument.body, { childList: true })
 
       // Register event handler for exiting presentation mode
       canvas.wrapperEl.onfullscreenchange = (_e: any) => {
-        if (document.fullscreenElement) return
+        if (activeDocument.fullscreenElement) return
         this.endPresentation(canvas)
       }
     }
@@ -349,7 +348,7 @@ export default class PresentationCanvasExtension extends CanvasExtension {
       canvas.wrapperEl.onfullscreenchange = null
 
       // Exit fullscreen mode
-      if (document.fullscreenElement) document.exitFullscreen()
+      if (activeDocument.fullscreenElement) activeDocument.exitFullscreen()
     }
     canvas.wrapperEl.onkeydown = null
 

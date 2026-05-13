@@ -28,7 +28,7 @@ export default class FlipEdgeCanvasExtension extends CanvasExtension {
   }
 
   private onEdgeDirectionDropdownCreated(canvas: Canvas) {
-    const dropdownEl = document.body.querySelector('div.menu')
+    const dropdownEl = activeDocument.body.querySelector('div.menu')
     if (!dropdownEl) return
 
     const separatorEl = CanvasHelper.createDropdownSeparatorElement()

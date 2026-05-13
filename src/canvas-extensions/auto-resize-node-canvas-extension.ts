@@ -1,3 +1,4 @@
+/* eslint-disable-next-line import/no-extraneous-dependencies */
 import { ViewUpdate } from "@codemirror/view"
 import { Canvas, CanvasNode } from "src/@types/Canvas"
 import CanvasHelper from "src/utils/canvas-helper"
@@ -20,12 +21,12 @@ export default class AutoResizeNodeCanvasExtension  extends CanvasExtension {
 
     this.plugin.registerEvent(this.plugin.app.workspace.on(
       'advanced-canvas:node-editing-state-changed',
-      (canvas: Canvas, node: CanvasNode, editing: boolean) => this.onNodeEditingStateChanged(canvas, node, editing)
+      (canvas: Canvas, node: CanvasNode, editing: boolean) => void this.onNodeEditingStateChanged(canvas, node, editing)
     ))
 
     this.plugin.registerEvent(this.plugin.app.workspace.on(
       'advanced-canvas:node-text-content-changed',
-      (canvas: Canvas, node: CanvasNode, viewUpdate: ViewUpdate) => this.onNodeTextContentChanged(canvas, node, viewUpdate.view.dom)
+      (canvas: Canvas, node: CanvasNode, viewUpdate: ViewUpdate) => void this.onNodeTextContentChanged(canvas, node, viewUpdate.view.dom)
     ))
   }
 
@@ -93,9 +94,10 @@ export default class AutoResizeNodeCanvasExtension  extends CanvasExtension {
       return
     }
 
-    const renderedMarkdownContainer = node.nodeEl.querySelector(".markdown-preview-view.markdown-rendered") as HTMLElement | null
+    const renderedMarkdownContainer = node.nodeEl.querySelector(".markdown-preview-view.markdown-rendered") as HTMLElement
     if (!renderedMarkdownContainer) return
 
+    /* eslint-disable-next-line obsidianmd/no-static-styles-assignment */
     renderedMarkdownContainer.style.height = "min-content"
     const newHeight = renderedMarkdownContainer.clientHeight
     renderedMarkdownContainer.style.removeProperty("height")
@@ -107,9 +109,10 @@ export default class AutoResizeNodeCanvasExtension  extends CanvasExtension {
     if (!this.isValidNodeType(node.getData())) return
     if (!this.canBeResized(node)) return
 
-    const cmScroller = dom.querySelector(".cm-scroller") as HTMLElement | null
+    const cmScroller = dom.querySelector(".cm-scroller") as HTMLElement
     if (!cmScroller) return
 
+    /* eslint-disable-next-line obsidianmd/no-static-styles-assignment */
     cmScroller.style.height = "min-content"
     const newHeight = cmScroller.scrollHeight
     cmScroller.style.removeProperty("height")

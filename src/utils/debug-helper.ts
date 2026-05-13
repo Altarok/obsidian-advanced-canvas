@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { BBox, Canvas, CanvasEdge, CanvasNode } from "src/@types/Canvas"
 import AdvancedCanvasPlugin from "src/main"
 

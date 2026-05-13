@@ -1,3 +1,4 @@
+/* eslint-disable-next-line import/no-extraneous-dependencies */
 import { EditorView, ViewUpdate } from "@codemirror/view"
 import { around } from "monkey-around"
 import { editorInfoField, requireApiVersion, Side, WorkspaceLeaf } from "obsidian"
@@ -353,10 +354,12 @@ export default class CanvasPatcher extends Patcher {
         }
 
         // Save the data to the file (only if the canvas isn't loading)
+        /* eslint-disable-next-line @typescript-eslint/no-deprecated */
         this.canvas.data = this.canvas.getData()
         if (this.initialized) this.canvas.view.requestSave()
 
         // Add to the undo stack
+        /* eslint-disable-next-line @typescript-eslint/no-deprecated */
         if (addHistory) this.canvas.pushHistory(this.canvas.data)
 
         return result
@@ -418,7 +421,7 @@ export default class CanvasPatcher extends Patcher {
           that.plugin.app.workspace.offref(addEdgeEventRef)
 
           // Listen for pointer up event
-          document.addEventListener('pointerup', (e: PointerEvent) => {
+          activeDocument.addEventListener('pointerup', (e: PointerEvent) => {
             that.plugin.app.workspace.trigger('advanced-canvas:edge-connection-dragging:after', this.canvas, edge, e, true, "to")
           }, { once: true })
         })
@@ -459,6 +462,7 @@ export default class CanvasPatcher extends Patcher {
         }
 
         // Save the data to the file (only if the canvas isn't loading)
+        /* eslint-disable-next-line @typescript-eslint/no-deprecated */
         this.canvas.data = this.canvas.getData()
         if (this.initialized) this.canvas.view.requestSave()
 
@@ -500,7 +504,7 @@ export default class CanvasPatcher extends Patcher {
         const draggingSide = Math.hypot(eventPos.x - fromPos.x, eventPos.y - fromPos.y) > Math.hypot(eventPos.x - toPos.x, eventPos.y - toPos.y) ? "to" : "from"
 
         that.plugin.app.workspace.trigger('advanced-canvas:edge-connection-dragging:before', this.canvas, this, e, false, draggingSide, previousEnds)
-        document.addEventListener('pointerup', (e: PointerEvent) => {
+        activeDocument.addEventListener('pointerup', (e: PointerEvent) => {
           that.plugin.app.workspace.trigger('advanced-canvas:edge-connection-dragging:after', this.canvas, this, e, false, draggingSide, previousEnds)
         }, { once: true })
 

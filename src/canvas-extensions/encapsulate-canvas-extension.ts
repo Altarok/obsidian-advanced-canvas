@@ -17,7 +17,7 @@ export default class EncapsulateCanvasExtension extends CanvasExtension {
       checkCallback: CanvasHelper.canvasCommand(
         this.plugin,
         (canvas: Canvas) => !canvas.readonly && canvas.selection.size > 0,
-        (canvas: Canvas) => this.encapsulateSelection(canvas)
+        (canvas: Canvas) => void this.encapsulateSelection(canvas)
       )
     })
 

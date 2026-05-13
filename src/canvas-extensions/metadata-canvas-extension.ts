@@ -26,6 +26,7 @@ export default class MetadataCanvasExtension extends CanvasExtension {
   }
 
   private onCanvasChanged(canvas: Canvas) {
+    /* eslint-disable-next-line @typescript-eslint/no-deprecated */
     const metadata = canvas.data?.metadata
     if (!metadata || metadata.version !== CURRENT_SPEC_VERSION)
       return new Notice("Metadata node not found or version mismatch. Should have been migrated (but wasn't).")

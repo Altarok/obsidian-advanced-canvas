@@ -41,7 +41,7 @@ export default class CommandsCanvasExtension extends CanvasExtension {
       checkCallback: CanvasHelper.canvasCommand(
         this.plugin,
         (canvas: Canvas) => !canvas.readonly,
-        (canvas: Canvas) => this.createFileNode(canvas)
+        (canvas: Canvas) => void this.createFileNode(canvas)
       )
     })
 

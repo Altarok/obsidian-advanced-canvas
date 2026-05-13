@@ -49,7 +49,7 @@ export default class MigrationHelper {
             }
 
             // Add edges to the global interdimensional edges
-            globalInterdimensionalEdges[portalId].push(...edges)
+            globalInterdimensionalEdges[portalId]?.push(...edges)
           }
 
           delete node.edgesToNodeFromPortal
@@ -64,7 +64,7 @@ export default class MigrationHelper {
 
       // Add metadata node
       canvas.metadata ??= {
-        version: TARGET_SPEC_VERSION, 
+        version: TARGET_SPEC_VERSION,
         frontmatter: {},
         startNode: startNode
       }
@@ -72,7 +72,7 @@ export default class MigrationHelper {
       return { version: TARGET_SPEC_VERSION, canvas: canvas }
     }
   }
-  
+
   static needsMigration(canvas: CanvasData): boolean {
     return canvas.metadata?.version !== CURRENT_SPEC_VERSION
   }

@@ -700,9 +700,9 @@ export class AdvancedCanvasPluginSettingTab extends PluginSettingTab {
         heading.disableToggle ? null : headingId as keyof AdvancedCanvasPluginSettingsValues
       )
 
-      const settingsHeaderChildrenContainerEl = document.createElement('div')
+      const settingsHeaderChildrenContainerEl = activeDocument.createDiv()
       settingsHeaderChildrenContainerEl.classList.add('settings-header-children')
-      settingsHeaderChildrenContainerEl.appendChild(document.createElement('span')) // Add empty span to not trigger the :first-child selector in the CSS
+      settingsHeaderChildrenContainerEl.appendChild(activeDocument.createSpan()) // Add empty span to not trigger the :first-child selector in the CSS
       containerEl.appendChild(settingsHeaderChildrenContainerEl)
 
       for (const [settingId, setting] of Object.entries(heading.children) as [keyof AdvancedCanvasPluginSettingsValues, Setting][]) {
@@ -844,11 +844,11 @@ export class AdvancedCanvasPluginSettingTab extends PluginSettingTab {
   }
 
   private createStylesSetting(containerEl: HTMLElement, settingId: keyof AdvancedCanvasPluginSettingsValues, setting: StyleAttributesSetting) {
-    const nestedContainerEl = document.createElement('details')
+    const nestedContainerEl = activeDocument.createEl('details')
     nestedContainerEl.classList.add('setting-item')
     containerEl.appendChild(nestedContainerEl)
 
-    const summaryEl = document.createElement('summary')
+    const summaryEl = activeDocument.createEl('summary')
     summaryEl.textContent = setting.label
     nestedContainerEl.appendChild(summaryEl)
 
@@ -873,20 +873,20 @@ export class AdvancedCanvasPluginSettingTab extends PluginSettingTab {
   }
 
   private async createKofiBanner(containerEl: HTMLElement) {
-    const banner = document.createElement('div')
+    const banner = activeDocument.createDiv()
     banner.classList.add('kofi-banner')
 
-    const title = document.createElement('span')
+    const title = activeDocument.createSpan()
     title.classList.add('ac-kofi-banner-title')
     title.textContent = 'Support the development of Advanced Canvas'
     banner.appendChild(title)
 
-    const koFiButton = document.createElement('a')
+    const koFiButton = activeDocument.createEl('a')
     koFiButton.classList.add('ac-kofi-button')
     koFiButton.href = KOFI_PAGE_URL
     koFiButton.target = '_blank'
 
-    const koFiImage = document.createElement('img')
+    const koFiImage = activeDocument.createEl('img')
     koFiImage.src = KOFI_BADGE_URI
 
     koFiButton.appendChild(koFiImage)

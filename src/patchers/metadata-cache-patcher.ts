@@ -96,21 +96,21 @@ class CanvasMetadataHandler {
       "changed", file, data, metadata
     )
 
-    const slowIndexingTimeout = setTimeout(() => {
+    const slowIndexingTimeout = activeWindow.setTimeout(() => {
       new Notice(`Canvas indexing taking a long time for file ${file.path}`)
     }, 10000)
 
     try {
       metadata = await CanvasMetadataHandler.computeCanvasMetadataAsync.call(this, data)
     } finally {
-      clearTimeout(slowIndexingTimeout)
+      activeWindow.clearTimeout(slowIndexingTimeout)
     }
 
     if (metadata) {
       this.saveMetaCache(hash, metadata)
       this.trigger("changed", file, data, metadata)
     } else {
-      console.log("Canvas metadata failed to parse", file)
+      console.error("Canvas metadata failed to parse", file)
     }
   }
 
@@ -175,14 +175,14 @@ class CanvasMetadataHandler {
           start: { line: 0, col: 1, offset: 0 }, // 0 for node
           end: { line: 0, col: 1, offset: index } // index of node
         }
-      }) as ExtendedEmbedCache))
+      }) satisfies ExtendedEmbedCache))
     }))
 
     // Add file nodes as embeds
     for (const [index, node] of (content.nodes ?? []).entries()) {
       if (node.type !== 'file') continue
 
-      const file = (node as CanvasFileNodeData).file!
+      const file = (node as CanvasFileNodeData).file
       if (!file) continue
 
       metadata.embeds.push({

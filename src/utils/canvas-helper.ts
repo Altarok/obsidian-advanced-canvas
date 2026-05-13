@@ -29,7 +29,7 @@ export default class CanvasHelper {
   }
 
   static createControlMenuButton(menuOption: MenuOption): HTMLElement {
-    const quickSetting = document.createElement('div')
+    const quickSetting = activeDocument.createDiv()
     if (menuOption.id) quickSetting.id = menuOption.id
     quickSetting.classList.add('canvas-control-item')
     setIcon(quickSetting, menuOption.icon)
@@ -45,7 +45,7 @@ export default class CanvasHelper {
   }
 
   static createCardMenuOption(canvas: Canvas, menuOption: MenuOption, previewNodeSize: () => Size, onPlaced: (canvas: Canvas, pos: Position) => void): HTMLElement {
-    const menuOptionElement = document.createElement('div')
+    const menuOptionElement = activeDocument.createDiv()
     if (menuOption.id) menuOptionElement.id = menuOption.id
     menuOptionElement.classList.add('canvas-card-menu-button')
     menuOptionElement.classList.add('mod-draggable')
@@ -72,7 +72,7 @@ export default class CanvasHelper {
   }
 
   static createPopupMenuOption(menuOption: MenuOption): HTMLElement {
-    const menuOptionElement = document.createElement('button')
+    const menuOptionElement = activeDocument.createEl('button')
     if (menuOption.id) menuOptionElement.id = menuOption.id
     menuOptionElement.classList.add('clickable-icon')
     setIcon(menuOptionElement, menuOption.icon)
@@ -97,7 +97,7 @@ export default class CanvasHelper {
         menuOptionElement.classList.add('is-active')
 
         // Add popup menu
-        const submenu = document.createElement('div')
+        const submenu = activeDocument.createDiv()
         submenu.id = submenuId
         submenu.classList.add('canvas-submenu')
 
@@ -225,7 +225,7 @@ export default class CanvasHelper {
     // Remove previous style menu
     popupMenuElement.querySelector(`#${STYLE_MENU_ID}`)?.remove()
 
-    const styleMenuButtonElement = document.createElement('button')
+    const styleMenuButtonElement = activeDocument.createEl('button')
     styleMenuButtonElement.id = STYLE_MENU_ID
     styleMenuButtonElement.classList.add('clickable-icon')
 
@@ -245,13 +245,13 @@ export default class CanvasHelper {
         return
       }
 
-      const styleMenuDropdownElement = document.createElement('div')
+      const styleMenuDropdownElement = activeDocument.createDiv()
       styleMenuDropdownElement.id = STYLE_MENU_DROPDOWN_ID
       styleMenuDropdownElement.classList.add('menu')
 
       // Position correctly
-      styleMenuDropdownElement.style.position = 'absolute'
-      styleMenuDropdownElement.style.maxHeight = 'initial'
+      styleMenuDropdownElement.style.position = 'absolute' /* eslint-disable-line obsidianmd/no-static-styles-assignment */
+      styleMenuDropdownElement.style.maxHeight = 'initial' /* eslint-disable-line obsidianmd/no-static-styles-assignment */
 
       styleMenuDropdownElement.style.top = `${popupMenuElement.getBoundingClientRect().height}px`
 
@@ -267,12 +267,12 @@ export default class CanvasHelper {
 
       // Add style options
       for (const stylableAttribute of stylableAttributes) {
-        const stylableAttributeElement = document.createElement('div')
+        const stylableAttributeElement = activeDocument.createDiv()
         stylableAttributeElement.classList.add('menu-item')
         stylableAttributeElement.classList.add('tappable')
 
         // Add icon
-        const iconElement = document.createElement('div')
+        const iconElement = activeDocument.createDiv()
         iconElement.classList.add('menu-item-icon')
 
         let selectedStyle = stylableAttribute.options
@@ -285,13 +285,13 @@ export default class CanvasHelper {
         stylableAttributeElement.appendChild(iconElement)
 
         // Add label
-        const labelElement = document.createElement('div')
+        const labelElement = activeDocument.createDiv()
         labelElement.classList.add('menu-item-title')
         labelElement.textContent = stylableAttribute.label
         stylableAttributeElement.appendChild(labelElement)
 
         // Add expand icon
-        const expandIconElement = document.createElement('div')
+        const expandIconElement = activeDocument.createDiv()
         expandIconElement.classList.add('menu-item-icon')
         setIcon(expandIconElement, 'chevron-right')
         stylableAttributeElement.appendChild(expandIconElement)
@@ -313,13 +313,13 @@ export default class CanvasHelper {
           // Remove previous submenu
           popupMenuElement.querySelector(`#${STYLE_MENU_DROPDOWN_SUBMENU_ID}`)?.remove()
 
-          const styleMenuDropdownSubmenuElement = document.createElement('div')
+          const styleMenuDropdownSubmenuElement = activeDocument.createDiv()
           styleMenuDropdownSubmenuElement.id = STYLE_MENU_DROPDOWN_SUBMENU_ID
           styleMenuDropdownSubmenuElement.classList.add('menu')
 
           // Position correctly
-          styleMenuDropdownSubmenuElement.style.position = 'absolute'
-          styleMenuDropdownSubmenuElement.style.maxHeight = 'initial'
+          styleMenuDropdownSubmenuElement.style.position = 'absolute' /* eslint-disable-line obsidianmd/no-static-styles-assignment */
+          styleMenuDropdownSubmenuElement.style.maxHeight = 'initial' /* eslint-disable-line obsidianmd/no-static-styles-assignment */
 
           const topOffset = parseFloat(window.getComputedStyle(styleMenuDropdownElement).getPropertyValue('padding-top')) + (styleMenuDropdownElement.offsetHeight - styleMenuDropdownElement.clientHeight) / 2
           styleMenuDropdownSubmenuElement.style.top = `${stylableAttributeElement.getBoundingClientRect().top - topOffset - popupMenuElement.getBoundingClientRect().top}px`
@@ -358,7 +358,7 @@ export default class CanvasHelper {
             if (selectedStyle === styleOption) {
               styleMenuDropdownSubmenuOptionElement.classList.add('mod-selected')
 
-              const selectedIconElement = document.createElement('div')
+              const selectedIconElement = activeDocument.createDiv()
               selectedIconElement.classList.add('menu-item-icon')
               selectedIconElement.classList.add('mod-selected')
 
@@ -381,18 +381,18 @@ export default class CanvasHelper {
   }
 
   static createDropdownOptionElement(menuOption: MenuOption): HTMLElement {
-    const menuDropdownOptionElement = document.createElement('div')
+    const menuDropdownOptionElement = activeDocument.createDiv()
     menuDropdownOptionElement.classList.add('menu-item')
     menuDropdownOptionElement.classList.add('tappable')
 
     // Add icon
-    const iconElement = document.createElement('div')
+    const iconElement = activeDocument.createDiv()
     iconElement.classList.add('menu-item-icon')
     setIcon(iconElement, menuOption.icon)
     menuDropdownOptionElement.appendChild(iconElement)
 
     // Add label
-    const labelElement = document.createElement('div')
+    const labelElement = activeDocument.createDiv()
     labelElement.classList.add('menu-item-title')
     labelElement.textContent = menuOption.label
     menuDropdownOptionElement.appendChild(labelElement)
@@ -415,7 +415,7 @@ export default class CanvasHelper {
   }
 
   static createDropdownSeparatorElement(): HTMLElement {
-    const separatorElement = document.createElement('div')
+    const separatorElement = activeDocument.createDiv()
     separatorElement.classList.add('menu-separator')
 
     return separatorElement

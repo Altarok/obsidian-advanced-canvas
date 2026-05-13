@@ -24,7 +24,7 @@ export default class ExportCanvasExtension extends CanvasExtension {
       checkCallback: CanvasHelper.canvasCommand(
         this.plugin,
         (canvas: Canvas) => canvas.nodes.size > 0,
-        (canvas: Canvas) => this.showExportImageSettingsModal(canvas, null)
+        (canvas: Canvas) => void this.showExportImageSettingsModal(canvas, null)
       )
     })
 
@@ -34,7 +34,7 @@ export default class ExportCanvasExtension extends CanvasExtension {
       checkCallback: CanvasHelper.canvasCommand(
         this.plugin,
         (canvas: Canvas) => canvas.selection.size > 0,
-        (canvas: Canvas) => this.showExportImageSettingsModal(
+        (canvas: Canvas) => void this.showExportImageSettingsModal(
           canvas,
           canvas.getSelectionData().nodes
             .map(nodeData => canvas.nodes.get(nodeData.id))
@@ -100,7 +100,7 @@ export default class ExportCanvasExtension extends CanvasExtension {
         .onChange(value => noFontExport = value)
       )
 
-    let theme: 'light' | 'dark' = document.body.classList.contains('theme-dark') ? 'dark' : 'light'
+    let theme: 'light' | 'dark' = activeDocument.body.classList.contains('theme-dark') ? 'dark' : 'light'
     new Setting(modal.contentEl)
       .setName('Theme')
       .setDesc('The theme used for the export.')
@@ -108,7 +108,7 @@ export default class ExportCanvasExtension extends CanvasExtension {
         .addOptions({
           light: 'Light',
           dark: 'Dark'
-        } as Record<'light' | 'dark', string>)
+        })
         .setValue(theme)
         .onChange(value => theme = value as 'light' | 'dark')
       )
@@ -167,10 +167,10 @@ export default class ExportCanvasExtension extends CanvasExtension {
 
   private async exportImage(canvas: Canvas, nodesToExport: CanvasNode[] | null, svg: boolean, pixelRatioFactor: number, noFontExport: boolean, theme: 'light' | 'dark', watermark: boolean, garbledText: boolean, transparentBackground: boolean) {
     // Set theme
-    const cachedTheme = document.body.classList.contains('theme-dark') ? 'dark' : 'light'
+    const cachedTheme = activeDocument.body.classList.contains('theme-dark') ? 'dark' : 'light'
     if (theme !== cachedTheme) {
-      document.body.classList.toggle('theme-dark', theme === 'dark')
-      document.body.classList.toggle('theme-light', theme === 'light')
+      activeDocument.body.classList.toggle('theme-dark', theme === 'dark')
+      activeDocument.body.classList.toggle('theme-light', theme === 'light')
     }
 
     const isWholeCanvas = nodesToExport === null
@@ -191,7 +191,7 @@ export default class ExportCanvasExtension extends CanvasExtension {
     // Create loading overlay
     new Notice('Exporting the canvas. Please wait...')
     const interactionBlocker = this.getInteractionBlocker()
-    document.body.appendChild(interactionBlocker)
+    activeDocument.body.appendChild(interactionBlocker)
 
     // Prepare the canvas
     canvas.screenshotting = true
@@ -276,9 +276,7 @@ export default class ExportCanvasExtension extends CanvasExtension {
       const startTimestamp = performance.now()
       while (unloadedNodes.length > 0 && performance.now() - startTimestamp < MAX_ALLOWED_LOADING_TIME) {
         await sleep(10)
-
         unloadedNodes = nodesToExport.filter(node => node.initialized === false || node.isContentMounted === false)
-        console.info(`Waiting for ${unloadedNodes.length} nodes to finish loading...`)
       }
 
       if (unloadedNodes.length === 0) {
@@ -292,7 +290,7 @@ export default class ExportCanvasExtension extends CanvasExtension {
 
         const edgeLabelElements = edgesToExport
           .map(edge => edge.labelElement?.wrapperEl)
-          .filter(labelElement => labelElement !== undefined) as HTMLElement[]
+          .filter(labelElement => labelElement !== undefined)
 
         const filter = (element: HTMLElement) => {
           // Filter nodes
@@ -336,7 +334,7 @@ export default class ExportCanvasExtension extends CanvasExtension {
         if (!isWholeCanvas) baseFilename += ` - Selection of ${nodesToExport.length}`
         const filename = `${baseFilename}.${svg ? 'svg' : 'png'}`
 
-        const downloadEl = document.createElement('a')
+        const downloadEl = activeDocument.createEl('a')
         downloadEl.href = imageDataUri
         downloadEl.download = filename
         downloadEl.click()
@@ -359,39 +357,39 @@ export default class ExportCanvasExtension extends CanvasExtension {
 
       // Restore theme
       if (theme !== cachedTheme) {
-        document.body.classList.toggle('theme-dark', cachedTheme === 'dark')
-        document.body.classList.toggle('theme-light', cachedTheme === 'light')
+        activeDocument.body.classList.toggle('theme-dark', cachedTheme === 'dark')
+        activeDocument.body.classList.toggle('theme-light', cachedTheme === 'light')
       }
     }
   }
 
   private getInteractionBlocker() {
     // Progress bar (like when loading the workspace)
-    const interactionBlocker = document.createElement('div')
+    const interactionBlocker = activeDocument.createDiv()
     interactionBlocker.classList.add('progress-bar-container')
 
-    const progressBar = document.createElement('div')
+    const progressBar = activeDocument.createDiv()
     progressBar.classList.add('progress-bar')
     interactionBlocker.appendChild(progressBar)
 
-    const progressBarMessage = document.createElement('div')
+    const progressBarMessage = activeDocument.createDiv()
     progressBarMessage.classList.add('progress-bar-message', 'u-center-text')
     progressBarMessage.innerText = 'Generating image...'
     progressBar.appendChild(progressBarMessage)
 
-    const progressBarIndicator = document.createElement('div')
+    const progressBarIndicator = activeDocument.createDiv()
     progressBarIndicator.classList.add('progress-bar-indicator')
     progressBar.appendChild(progressBarIndicator)
 
-    const progressBarLine = document.createElement('div')
+    const progressBarLine = activeDocument.createDiv()
     progressBarLine.classList.add('progress-bar-line')
     progressBarIndicator.appendChild(progressBarLine)
 
-    const progressBarSublineIncrease = document.createElement('div')
+    const progressBarSublineIncrease = activeDocument.createDiv()
     progressBarSublineIncrease.classList.add('progress-bar-subline', 'mod-increase')
     progressBarIndicator.appendChild(progressBarSublineIncrease)
 
-    const progressBarSublineDecrease = document.createElement('div')
+    const progressBarSublineDecrease = activeDocument.createDiv()
     progressBarSublineDecrease.classList.add('progress-bar-subline', 'mod-decrease')
     progressBarIndicator.appendChild(progressBarSublineDecrease)
 
@@ -413,7 +411,7 @@ export default class ExportCanvasExtension extends CanvasExtension {
     // Enlarge the bounding box in the bottom
     bbox.maxY += height + watermarkPadding.y
 
-    const watermarkEl = document.createElementNS("http://www.w3.org/2000/svg", "svg")
+    const watermarkEl = activeDocument.createSvg("svg")
     watermarkEl.id = 'watermark-ac'
     watermarkEl.style.transform = `translate(${bbox.minX + watermarkPadding.x}px, ${bbox.maxY - height - watermarkPadding.y}px)`
 

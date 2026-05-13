@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { CachedMetadata, EmbedCache, LinkCache, Pos } from "obsidian"
 import { CustomWorkspaceEvents } from "./CustomWorkspaceEvents"
 import SuggestManager from "./SuggestManager"

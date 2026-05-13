@@ -39,7 +39,7 @@ export default class ColorPaletteCanvasExtension extends CanvasExtension {
     `).join('')
 
     for (const win of this.plugin.windowsManager.windows) {
-      const doc = win.document
+      const doc = win.activeDocument
 
       doc.getElementById(CUSTOM_COLORS_MOD_STYLES_ID)?.remove()
 
@@ -57,8 +57,8 @@ export default class ColorPaletteCanvasExtension extends CanvasExtension {
     this.observer = new MutationObserver(mutations => {
       const colorMenuOpened = mutations.some(mutation =>
         Object.values(mutation.addedNodes).some((node: Node) =>
-          node instanceof HTMLElement && node.classList.contains('canvas-submenu') && Object.values(node.childNodes).some((node: Node) =>
-            node instanceof HTMLElement && node.classList.contains('canvas-color-picker-item')
+          node.instanceOf(HTMLElement) && node.classList.contains('canvas-submenu') && Object.values(node.childNodes).some((node: Node) =>
+            node.instanceOf(HTMLElement) && node.classList.contains('canvas-color-picker-item')
           )
         )
       )
@@ -80,7 +80,7 @@ export default class ColorPaletteCanvasExtension extends CanvasExtension {
   }
 
   private createColorMenuItem(canvas: Canvas, colorId: string) {
-    const menuItem = document.createElement('div')
+    const menuItem = activeDocument.createDiv()
     menuItem.classList.add('canvas-color-picker-item')
     menuItem.classList.add(`mod-canvas-color-${colorId}`)
 
@@ -100,7 +100,7 @@ export default class ColorPaletteCanvasExtension extends CanvasExtension {
   private getCustomColors(): string[] {
     const colors: string[] = []
 
-    const style = getComputedStyle(document.body)
+    const style = getComputedStyle(activeDocument.body)
     let colorIndex = DEFAULT_COLORS_COUNT + 1
     while (style.getPropertyValue(`--canvas-color-${colorIndex}`)) {
       colors.push(colorIndex.toString())

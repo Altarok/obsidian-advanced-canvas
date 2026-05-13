@@ -25,7 +25,7 @@ export default class CssStylesConfigManager<T> {
     this.cachedConfig = []
 
     // Parse config from CSS
-    const styleSheets = document.styleSheets
+    const styleSheets = activeDocument.styleSheets
     for (let i = 0; i < styleSheets.length; i++) {
       const sheet = styleSheets.item(i)
       if (!sheet) continue
