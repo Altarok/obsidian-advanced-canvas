@@ -61,64 +61,34 @@ details.setting-item {
 }
 
 .kofi-banner {
-  position: relative;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 
   padding: var(--size-4-3);
 
-  background-color: var(--background-secondary);
+  background-color: var(--background-primary-alt);
 
-  border: 1px solid var(--divider-color);
-  border-radius: var(--radius-s);
+  border-radius: var(--radius-m);
 
-  h1 {
+  .ac-kofi-banner-title {
     margin: 0;
-    margin-bottom: 10px;
 
-    font-size: var(--font-ui-large);
+    font-size: var(--font-ui-small);
     font-weight: 600;
   }
 
-  .progress-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-items: center;
-
-    progress {
-      background: transparent;
-
-      &::-webkit-progress-bar {
-        background-color: var(--background-modifier-border);
-        border-radius: var(--input-radius);
-      }
-
-      &::-webkit-progress-value {
-        background-color: var(--color-accent);
-        border-radius: var(--input-radius);
-      }
-    }
-
-    .hourly-rate {
-      margin-left: 10px;
-
-      font-weight: 600;
-    }
-  }
-
   .ac-kofi-button {
-    align-self: flex-end;
-
     width: min-content;
     height: min-content;
 
     line-height: 0;
 
     img {
-      min-width: 100px;
+      min-width: 75px;
       width: 25%;
-      max-width: 200px;
+      max-width: 100px;
     }
   }
 }
