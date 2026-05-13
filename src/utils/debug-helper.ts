@@ -1,4 +1,4 @@
-/* eslint-disable obsidianmd/rule-custom-message */
+/* eslint-disable obsidianmd/rule-custom-message -- It's a debug file... */
 import { BBox, Canvas, CanvasEdge, CanvasNode } from "src/@types/Canvas"
 import AdvancedCanvasPlugin from "src/main"
 

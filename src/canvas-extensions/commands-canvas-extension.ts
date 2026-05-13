@@ -171,7 +171,7 @@ export default class CommandsCanvasExtension extends CanvasExtension {
             .filter(node => node !== undefined) as CanvasNode[]
           if (selectedNodes.length !== 2) return
 
-          const [nodeA, nodeB] = selectedNodes
+          const [nodeA, nodeB] = selectedNodes as [CanvasNode, CanvasNode]
           const nodeAData = nodeA.getData()
           const nodeBData = nodeB.getData()
 
@@ -189,7 +189,7 @@ export default class CommandsCanvasExtension extends CanvasExtension {
       checkCallback: CanvasHelper.canvasCommand(
         this.plugin,
         (canvas: Canvas) => !canvas.readonly && canvas.selection.size === 1,
-        async (canvas: Canvas) => {
+        (canvas: Canvas) => {
           const file = canvas.view.file
           if (!file) return
 
@@ -197,9 +197,9 @@ export default class CommandsCanvasExtension extends CanvasExtension {
           if (!nodeData) return
 
           const wikilink = `[[${file.path}#${nodeData.id}|${file.name} (${TextHelper.toTitleCase(nodeData.type)} node)]]`
-          await navigator.clipboard.writeText(wikilink)
-
-          new Notice("Copied wikilink to node to clipboard.", 2000)
+          navigator.clipboard.writeText(wikilink).then(() =>
+            new Notice("Copied wikilink to node to clipboard.", 2000)
+          )
         }
       )
     })
