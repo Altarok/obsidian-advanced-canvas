@@ -1,4 +1,3 @@
-import "obsidian"
 import * as obsidian from "obsidian"
 import { CustomWorkspaceEvents } from "./CustomWorkspaceEvents"
 import SuggestManager from "./SuggestManager"
