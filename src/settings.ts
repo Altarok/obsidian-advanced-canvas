@@ -356,7 +356,13 @@ export const SETTINGS = {
         label: 'Custom node style settings',
         description: 'Add custom style settings for nodes. (Go to GitHub for more information)',
         type: 'button',
-        onClick: () => window.open("https://github.com/Developer-Mike/obsidian-advanced-canvas/blob/main/README.md#custom-styles")
+        onClick: () => {
+          // eslint-disable-next-line obsidianmd/prefer-create-el -- Temp virtual anchor
+          const anchor = activeDocument.createElement('a')
+          anchor.href = "https://github.com/Developer-Mike/obsidian-advanced-canvas/blob/main/README.md#custom-styles"
+          anchor.target = '_blank'
+          anchor.click()
+        },
       } as ButtonSetting,
       defaultTextNodeColor: {
         label: 'Default text node color',
@@ -386,7 +392,13 @@ export const SETTINGS = {
         label: 'Custom edge style settings',
         description: 'Add custom style settings for edges. (Go to GitHub for more information)',
         type: 'button',
-        onClick: () => window.open("https://github.com/Developer-Mike/obsidian-advanced-canvas/blob/main/README.md#custom-styles")
+        onClick: () => {
+          // eslint-disable-next-line obsidianmd/prefer-create-el -- Temp virtual anchor
+          const anchor = activeDocument.createElement('a')
+          anchor.href = "https://github.com/Developer-Mike/obsidian-advanced-canvas/blob/main/README.md#custom-styles"
+          anchor.target = '_blank'
+          anchor.click()
+        },
       } as ButtonSetting,
       inheritEdgeColorFromNode: {
         label: 'Inherit edge color from node',
@@ -746,7 +758,11 @@ export class AdvancedCanvasPluginSettingTab extends PluginSettingTab {
         .setTooltip("Open github documentation")
         .setIcon('info')
         .onClick(async () => {
-          window.open(`${README_URL}#${infoSection}`)
+          // eslint-disable-next-line obsidianmd/prefer-create-el -- Temp virtual anchor
+          const anchor = activeDocument.createElement('a')
+          anchor.href = `${README_URL}#${infoSection}`
+          anchor.target = '_blank'
+          anchor.click()
         })
       )
     }
