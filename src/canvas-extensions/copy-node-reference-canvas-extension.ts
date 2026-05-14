@@ -2,10 +2,11 @@ import {Canvas} from 'src/@types/Canvas'
 import CanvasHelper, {MenuOption} from 'src/utils/canvas-helper'
 import CanvasExtension from './canvas-extension'
 import {Notice} from 'obsidian'
+import {AdvancedCanvasPluginSettingsValues} from "../settings";
 
 export default class CopyNodeReferenceCanvasExtension extends CanvasExtension {
 
-  isEnabled() { return true }
+  isEnabled() { return 'enableSingleNodeLinks' as const }
 
   init() {
     this.plugin.registerEvent(this.plugin.app.workspace.on('advanced-canvas:popup-menu-created',
@@ -15,14 +16,14 @@ export default class CopyNodeReferenceCanvasExtension extends CanvasExtension {
 
   private onPopupMenuCreated(canvas: Canvas): void {
     const selectionNodeData = canvas.getSelectionData().nodes
-    if (canvas.readonly || selectionNodeData.length !== 1) return
+    if (selectionNodeData.length !== 1) return
 
     const menuOption: MenuOption = {
       id: 'node-popup-menu-option-copy-reference',
-      label: 'Copy reference',
-      icon: 'copy',
+      label: 'Copy wikilink to node',
+      icon: 'link',
       callback: () => {
-        const selectedNode = selectionNodeData[0]
+        const selectedNode = selectionNodeData[0]!
         const ref = `[[${canvas.view.file.path}#${selectedNode.id}]]`
 
         navigator.clipboard.writeText(ref).then(() => {
