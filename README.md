@@ -137,7 +137,7 @@ This significantly enhances the ability to manage, organize, and customize your 
 Advanced Canvas can automatically create edges between file nodes based on their frontmatter properties. By default (if enabled), it will create edges to files linked in the `canvas-edges` frontmatter property. This allows you to create fixed relationships between file nodes in your canvas, making it easier to visualize fixed structures or connections between different files.
 
 ### Single Node Links & Embeds
-Advanced Canvas now allows you to link or embed the content of a *single node* from a `.canvas` file directly into your markdown files. This provides a granular way to reference specific pieces of information within your canvases.
+Advanced Canvas now allows you to link or embed the content of a *single node* from a `.canvas` file directly into your markdown files. This provides a granular way to reference specific pieces of information within your canvases. (Take a look at `Advanced Canvas: Copy wikilink to node` for getting the id of a node).
 
 *   **Syntax:**
     *   **Linking:** Use the standard wikilink format with the node ID appended after a `#`:

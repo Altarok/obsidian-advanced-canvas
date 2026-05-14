@@ -294,7 +294,7 @@ export const SETTINGS = {
     children: {
       enableSingleNodeLinks: {
         label: 'Enable support for linking to a node using a [[wikilink]]',
-        description: 'When enabled, you can link and embed a node using [[canvas-file#node-id]].',
+        description: 'When enabled, you can link and embed a node using [[canvas-file#node-id]] (Use the "Copy wikilink to node" command to get an id).',
         type: 'boolean'
       }
     }
