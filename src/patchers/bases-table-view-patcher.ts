@@ -15,7 +15,7 @@ export default class BasesTableViewPatcher extends Patcher {
     const that = this // eslint-disable-line @typescript-eslint/no-this-alias -- For patcher
 
     await Patcher.patchOnce<BasesViewRegistrationEntry<BasesTableView>, BasesTableView>(this.plugin, bases.registrations.table, resolve => ({
-      factory: Patcher.OverrideExisting(next => function (...args: any): BasesTableView {
+      factory: Patcher.OverrideExisting(next => function (...args: unknown[]): BasesTableView {
         const view = next.call(this, ...args)
 
         void that.patchTableView(view)
@@ -30,7 +30,7 @@ export default class BasesTableViewPatcher extends Patcher {
     const that = this // eslint-disable-line @typescript-eslint/no-this-alias -- For patcher
 
     await Patcher.patchOnce<BasesTableView, BasesTableRow>(this.plugin, basesView, resolve => ({
-      updateVirtualDisplay: Patcher.OverrideExisting(next => function (...args: any): void {
+      updateVirtualDisplay: Patcher.OverrideExisting(next => function (...args: unknown[]): void {
         const result = next.call(this, ...args)
 
         if (this.rows.length > 0) {
@@ -49,7 +49,7 @@ export default class BasesTableViewPatcher extends Patcher {
     const that = this // eslint-disable-line @typescript-eslint/no-this-alias -- For patcher
 
     await Patcher.patchOnce<BasesTableRow, BasesTableCell>(this.plugin, row, resolve => ({
-      render: Patcher.OverrideExisting(next => function (...args: any): void {
+      render: Patcher.OverrideExisting(next => function (...args: unknown[]): void {
         let result = next.call(this, ...args)
 
         if (this.cells.length > 0) {

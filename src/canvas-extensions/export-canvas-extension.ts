@@ -1,4 +1,5 @@
 import * as HtmlToImage from 'html-to-image'
+import { Options } from 'html-to-image/lib/types'
 import { Modal, Notice, Setting } from "obsidian"
 import { BBox, Canvas, CanvasNode } from "src/@types/Canvas"
 import BBoxHelper from "src/utils/bbox-helper"
@@ -309,7 +310,7 @@ export default class ExportCanvasExtension extends CanvasExtension {
         }
 
         // Generate the image
-        const options: any = {
+        const options: Options = {
           pixelRatio: pixelRatio,
           backgroundColor: backgroundColor,
           height: height,

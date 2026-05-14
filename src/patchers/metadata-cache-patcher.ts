@@ -12,7 +12,7 @@ export default class MetadataCachePatcher extends Patcher {
     if (!this.plugin.settings.getSetting('canvasMetadataCompatibilityEnabled')) return
 
     Patcher.patchPrototype<ExtendedMetadataCache>(this.plugin, this.plugin.app.metadataCache, {
-      getCache: Patcher.OverrideExisting(next => function (filepath: string, ...args: any[]): ExtendedCachedMetadata | null {
+      getCache: Patcher.OverrideExisting(next => function (filepath: string, ...args: unknown[]): ExtendedCachedMetadata | null {
         // Bypass the "md" extension check by handling the "canvas" extension here
         if (FilepathHelper.extension(filepath) === 'canvas') {
           if (!Object.prototype.hasOwnProperty.call(this.fileCache, filepath))
@@ -24,7 +24,7 @@ export default class MetadataCachePatcher extends Patcher {
 
         return next.call(this, filepath, ...args) as ExtendedCachedMetadata
       }),
-      computeFileMetadataAsync: Patcher.OverrideExisting(next => async function (file: TFile, ...args: any[]) {
+      computeFileMetadataAsync: Patcher.OverrideExisting(next => async function (file: TFile, ...args: unknown[]) {
         if (file instanceof TFile && file?.extension === 'canvas')
           return CanvasMetadataHandler.computeCanvasFileMetadataAsync.call(this, file)
 

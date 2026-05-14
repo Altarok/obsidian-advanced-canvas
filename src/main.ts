@@ -134,6 +134,7 @@ export default class AdvancedCanvasPlugin extends Plugin {
 
     this.windowsManager = new WindowsManager(this)
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Just use any to avoid type issues
     this.patchers = PATCHERS.map((Patcher: any) => {
       if (!Patcher) return
 
@@ -143,6 +144,7 @@ export default class AdvancedCanvasPlugin extends Plugin {
       }
     })
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Just use any to avoid type issues
     this.canvasExtensions = CANVAS_EXTENSIONS.map((Extension: any) => {
       try { return new Extension(this) }
       catch (e) {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- Unknown typings remaining */
 import { Menu } from "obsidian"
 import { BBox, Canvas, CanvasEdge, CanvasEdgeEnd, CanvasElement, CanvasNode, CanvasView, Position, SelectionData } from "./Canvas"
 import { CanvasData } from "./AdvancedJsonCanvas"

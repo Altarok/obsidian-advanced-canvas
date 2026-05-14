@@ -7,7 +7,7 @@ export default class FileManagerPatcher extends Patcher {
 
     const that = this // eslint-disable-line @typescript-eslint/no-this-alias -- For patcher
     Patcher.patch(this.plugin, this.plugin.app.fileManager, {
-      processFrontMatter: Patcher.OverrideExisting(next => async function (file: TFile, fn: (frontmatter: any) => void, options?: DataWriteOptions) {
+      processFrontMatter: Patcher.OverrideExisting(next => async function (file: TFile, fn: (frontmatter: unknown) => void, options?: DataWriteOptions) {
         // Check if the file is a canvas file
         if (file?.extension === 'canvas') {
           that.plugin.app.vault.process(file, (data: string) => {

@@ -127,7 +127,7 @@ export default class CanvasHelper {
     }
 
     const sisterElement = index >= 0 ? popupMenuEl.children[index] : popupMenuEl.children[popupMenuEl.children.length + index]
-    popupMenuEl.insertAfter(element, sisterElement)
+    popupMenuEl.insertAfter(element, sisterElement!)
   }
 
   static getCenterCoordinates(canvas: Canvas, nodeSize: Size): Position {
@@ -141,7 +141,7 @@ export default class CanvasHelper {
 
   static getBBox(canvasElements: (CanvasNode | CanvasNodeData | CanvasEdge)[]) {
     const bBoxes = canvasElements.map(element => {
-      if ((element as any).getBBox) return (element as CanvasNode).getBBox()
+      if ('getBBox' in element) return (element as CanvasNode).getBBox()
 
       const nodeData = (element as CanvasNodeData)
       if (nodeData.x !== undefined && nodeData.y !== undefined && nodeData.width !== undefined && nodeData.height !== undefined)

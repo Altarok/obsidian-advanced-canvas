@@ -14,6 +14,7 @@ export default class MigrationHelper {
       const globalInterdimensionalEdges: { [portalId: string]: CanvasEdgeData[] } = {}
 
       // Rename node properties
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- We do not have typings for old canvas data
       for (const node of (canvas.nodes ?? []) as any[]) {
         node.dynamicHeight = node.autoResizeHeight
         delete node.autoResizeHeight
@@ -57,6 +58,7 @@ export default class MigrationHelper {
       }
 
       // Distribute global interdimensional edges to portals
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- We do not have typings for old canvas data
       for (const node of (canvas.nodes ?? []) as any[]) {
         if (!(node.id in globalInterdimensionalEdges)) continue
         node.interdimensionalEdges = globalInterdimensionalEdges[node.id]
@@ -95,6 +97,7 @@ export default class MigrationHelper {
       const { version: newVersion, canvas: migratedCanvas } = migrationFunction(canvas)
 
       // Update version and canvas
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- We hardcode the version in the types so we need to cast it here
       version = newVersion as any
       canvas = migratedCanvas
 

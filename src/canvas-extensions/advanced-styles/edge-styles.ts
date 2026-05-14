@@ -1,4 +1,5 @@
-import { BBox, Canvas, CanvasEdge, CanvasNode, Position } from "src/@types/Canvas"
+import { BBox, Canvas, CanvasEdge, CanvasElement, CanvasNode, Position } from "src/@types/Canvas"
+import { CanvasNodeData } from "src/@types/AdvancedJsonCanvas"
 import BBoxHelper from "src/utils/bbox-helper"
 import CanvasHelper from "src/utils/canvas-helper"
 import CanvasExtension from "../canvas-extension"
@@ -85,19 +86,19 @@ export default class EdgeStylesExtension extends CanvasExtension {
   }
 
   private onPopupMenuCreated(canvas: Canvas): void {
-    const selectedEdges = [...canvas.selection].filter((item: any) => item.path !== undefined) as CanvasEdge[]
+    const selectedEdges = [...canvas.selection].filter((item: CanvasElement) => (item as CanvasEdge).path !== undefined) as CanvasEdge[]
     if (canvas.readonly || selectedEdges.length === 0 || selectedEdges.length !== canvas.selection.size)
       return
 
     CanvasHelper.addStyleAttributesToPopup(
       this.plugin, canvas,  [...BUILTIN_EDGE_STYLE_ATTRIBUTES, /* Legacy */ ...this.plugin.settings.getSetting('customEdgeStyleAttributes'), ...this.cssStylesManager.getStyles()],
-      selectedEdges[0].getData().styleAttributes ?? {},
+      selectedEdges[0]!.getData().styleAttributes ?? {},
       (attribute, value) => this.setStyleAttributeForSelection(canvas, attribute, value)
     )
   }
 
   private setStyleAttributeForSelection(canvas: Canvas, attribute: StyleAttribute, value: string | null): void {
-    const selectedEdges = [...canvas.selection].filter((item: any) => item.path !== undefined) as CanvasEdge[]
+    const selectedEdges = [...canvas.selection].filter((item: CanvasElement) => (item as CanvasEdge).path !== undefined) as CanvasEdge[]
 
     for (const edge of selectedEdges) {
       const edgeData = edge.getData()
@@ -132,7 +133,7 @@ export default class EdgeStylesExtension extends CanvasExtension {
       const tooManySelected = canvas.selection.size > MAX_LIVE_UPDATE_SELECTION_SIZE
       if (tooManySelected) return
 
-      const groupNodesSelected = [...canvas.selection].some((item: any) => item.getData()?.type === 'group')
+      const groupNodesSelected = [...canvas.selection].some((item: CanvasElement) => (item.getData() as CanvasNodeData)?.type === 'group')
       if (groupNodesSelected) return
     }
 
@@ -158,7 +159,8 @@ export default class EdgeStylesExtension extends CanvasExtension {
         toBBoxSidePos :
         edge.bezier.to
 
-      const path = new (EDGE_PATHFINDING_METHODS[pathfindingMethod] as any)(
+      const PathfindingConstructor = EDGE_PATHFINDING_METHODS[pathfindingMethod] as new (...args: ConstructorParameters<typeof EdgePathfindingMethod>) => EdgePathfindingMethod
+      const path = new PathfindingConstructor(
         this.plugin,
         canvas,
         fromNodeBBox, fromPos, fromBBoxSidePos, edge.from.side,

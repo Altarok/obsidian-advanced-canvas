@@ -16,7 +16,7 @@ export default class PropertiesPatcher extends Patcher {
           // Otherwise, call the original method
           return next.call(this, file)
         }),
-        updateFrontmatter: Patcher.OverrideExisting(next => function (file: TFile, content: string): { [key: string]: any } | null {
+        updateFrontmatter: Patcher.OverrideExisting(next => function (file: TFile, content: string): { [key: string]: unknown } | null {
           // Check if the file is a canvas file
           if (file?.extension === 'canvas') {
             let frontmatter
@@ -33,7 +33,7 @@ export default class PropertiesPatcher extends Patcher {
           // Otherwise, call the original method
           return next.call(this, file, content)
         }),
-        saveFrontmatter: Patcher.OverrideExisting(next => function (frontmatter: { [key: string]: any }): void {
+        saveFrontmatter: Patcher.OverrideExisting(next => function (frontmatter: { [key: string]: unknown }): void {
           // Check if the file is a canvas file
           if (this.file?.extension === 'canvas') {
             if (this.file !== this.modifyingFile) return

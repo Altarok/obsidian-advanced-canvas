@@ -1,4 +1,4 @@
-import { Canvas, CanvasEdge } from "src/@types/Canvas"
+import { Canvas, CanvasEdge, CanvasElement } from "src/@types/Canvas"
 import CanvasExtension from "./canvas-extension"
 import CanvasHelper from "src/utils/canvas-helper"
 
@@ -43,7 +43,9 @@ export default class FlipEdgeCanvasExtension extends CanvasExtension {
   }
 
   private flipEdge(canvas: Canvas) {
-    const selectedEdges = [...canvas.selection].filter((item: any) => item.path !== undefined) as CanvasEdge[]
+    const selectedEdges = [...canvas.selection].filter((item: CanvasElement) =>
+      (item as CanvasEdge).path !== undefined
+    ) as CanvasEdge[]
     if (selectedEdges.length === 0) return
 
     for (const edge of selectedEdges) {

@@ -47,7 +47,6 @@ class Node {
   }
 }
 
-// FIXME: Performance improvements
 export default class EdgePathfindingAStar extends EdgePathfindingMethod {
   getPath(): EdgePath | null {
     const nodeBBoxes = [...this.canvas.nodes.values()]
@@ -87,7 +86,7 @@ export default class EdgePathfindingAStar extends EdgePathfindingMethod {
 
     return {
       svgPath: svgPath,
-      center: pathArray[Math.floor(pathArray.length / 2)],
+      center: pathArray[Math.floor(pathArray.length / 2)]!,
       rotateArrows: false
     }
   }

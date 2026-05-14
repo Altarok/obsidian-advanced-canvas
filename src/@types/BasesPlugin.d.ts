@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- Unknown typings remaining */
 import { TFile } from "obsidian"
 
 export interface BasesPlugin {

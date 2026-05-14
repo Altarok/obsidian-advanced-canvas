@@ -9,11 +9,12 @@ export default class BacklinksPatcher extends Patcher {
     if (!this.plugin.settings.getSetting('canvasMetadataCompatibilityEnabled')) return
 
     const that = this // eslint-disable-line @typescript-eslint/no-this-alias -- For patcher
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- We do not have typings for the Backlink plugin
     await Patcher.waitForViewRequest<any>(this.plugin, "backlink", view => {
       Patcher.patchPrototype<Backlink>(this.plugin, view.backlink, {
-        recomputeBacklink: Patcher.OverrideExisting(next => function (file: TFile, ...args: any[]): void {
+        recomputeBacklink: Patcher.OverrideExisting(next => function (file: TFile): void {
           that.isRecomputingBacklinks = true
-          const result = next.call(this, file, ...args)
+          const result = next.call(this, file)
           that.isRecomputingBacklinks = false
           return result
         })
@@ -32,8 +33,8 @@ export default class BacklinksPatcher extends Patcher {
           }
         }
       },
-      getMarkdownFiles: Patcher.OverrideExisting(next => function (...args: any[]): TFile[] {
-        if (!that.isRecomputingBacklinks) return next.call(this, ...args)
+      getMarkdownFiles: Patcher.OverrideExisting(next => function (): TFile[] {
+        if (!that.isRecomputingBacklinks) return next.call(this)
 
         // If we are recomputing backlinks, we need to include markdown as well as canvas files
         const files: TFile[] = []

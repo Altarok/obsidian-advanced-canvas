@@ -15,7 +15,7 @@ export interface Setting {
   description: string
   type: null | 'text' | 'number' | 'dimension' | 'boolean' | 'dropdown' | 'button' | 'styles'
 
-  parse?: (value: any) => any
+  parse?: (value: unknown) => unknown
 }
 
 export interface StyleAttributesSetting extends Setting {
@@ -49,5 +49,5 @@ export interface DropdownSetting extends Setting {
 
 export interface ButtonSetting extends Setting {
   type: 'button'
-  onClick: () => any
+  onClick: () => unknown
 }

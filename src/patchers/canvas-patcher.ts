@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- Too many anys */
 /* eslint-disable-next-line import/no-extraneous-dependencies -- Included in Obsidian */
 import { EditorView, ViewUpdate } from "@codemirror/view"
 import { around } from "monkey-around"
@@ -528,7 +529,7 @@ export default class CanvasPatcher extends Patcher {
 
     // Patch CanvasElement object
     const uninstall = around(canvasElement, {
-      initialize: next => function (...args: any): void {
+      initialize: next => function (this: any, ...args: any): void {
         const result = next.call(this, ...args)
 
         onReady()

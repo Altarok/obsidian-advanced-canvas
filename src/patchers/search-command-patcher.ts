@@ -9,7 +9,7 @@ export default class SearchCommandPatcher extends Patcher {
 
     const that = this // eslint-disable-line @typescript-eslint/no-this-alias -- For patcher
     Patcher.patch(this.plugin, this.plugin.app.commands.commands["editor:open-search"], {
-      checkCallback: Patcher.OverrideExisting(next => function (this: any, checking: boolean) {
+      checkCallback: Patcher.OverrideExisting(next => function (this: unknown, checking: boolean) {
         // If there is an active md editor, return the original method
         if (that.plugin.app.workspace.activeEditor) return next.call(this, checking)
 
