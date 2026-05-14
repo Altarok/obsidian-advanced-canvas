@@ -197,7 +197,7 @@ export default class ExportCanvasExtension extends CanvasExtension {
     // Prepare the canvas
     canvas.screenshotting = true
     canvas.canvasEl.classList.add('is-exporting')
-    if (garbledText) canvas.canvasEl.classList.add('is-text-garbled')
+    if (garbledText) canvas.wrapperEl.classList.add('is-text-garbled')
     let watermarkEl = null
 
     const cachedSelection = new Set(canvas.selection)
@@ -349,7 +349,7 @@ export default class ExportCanvasExtension extends CanvasExtension {
       // Reset the canvas
       canvas.screenshotting = false
       canvas.canvasEl.classList.remove('is-exporting')
-      if (garbledText) canvas.canvasEl.classList.remove('is-text-garbled')
+      if (garbledText) canvas.wrapperEl.classList.remove('is-text-garbled')
       if (watermarkEl) canvas.canvasEl.removeChild(watermarkEl)
       canvas.updateSelection(() => canvas.selection = cachedSelection)
       canvas.setViewport(cachedViewport.x, cachedViewport.y, cachedViewport.zoom)
