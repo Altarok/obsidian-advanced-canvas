@@ -143,9 +143,8 @@ export default class CanvasHelper {
     const bBoxes = canvasElements.map(element => {
       if ('getBBox' in element) return (element as CanvasNode).getBBox()
 
-      const nodeData = (element as CanvasNodeData)
-      if (nodeData.x !== undefined && nodeData.y !== undefined && nodeData.width !== undefined && nodeData.height !== undefined)
-        return { minX: nodeData.x, minY: nodeData.y, maxX: nodeData.x + nodeData.width, maxY: nodeData.y + nodeData.height }
+      if (element.x !== undefined && element.y !== undefined && element.width !== undefined && element.height !== undefined)
+        return { minX: element.x, minY: element.y, maxX: element.x + element.width, maxY: element.y + element.height }
 
       return null
     }).filter(bbox => bbox !== null) as BBox[]

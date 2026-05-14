@@ -199,7 +199,7 @@ export default class CommandsCanvasExtension extends CanvasExtension {
           const wikilink = `[[${file.path}#${nodeData.id}|${file.name} (${TextHelper.toTitleCase(nodeData.type)} node)]]`
           navigator.clipboard.writeText(wikilink).then(() =>
             new Notice("Copied wikilink to node to clipboard.", 2000)
-          )
+          ).catch(() => new Notice("Failed to copy wikilink to node to clipboard.", 2000))
         }
       )
     })
