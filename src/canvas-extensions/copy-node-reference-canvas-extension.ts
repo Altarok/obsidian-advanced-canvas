@@ -2,8 +2,8 @@ import { Canvas } from 'src/@types/Canvas'
 import CanvasHelper, { MenuOption } from 'src/utils/canvas-helper'
 import CanvasExtension from './canvas-extension'
 import { Notice, TFile } from 'obsidian'
-import TextHelper from "../utils/text-helper";
-import { CanvasNodeData } from "obsidian/canvas";
+import TextHelper from "../utils/text-helper"
+import { CanvasNodeData } from "obsidian/canvas"
 
 export default class CopyNodeReferenceCanvasExtension extends CanvasExtension {
   isEnabled() { return 'enableSingleNodeLinks' as const }
@@ -29,7 +29,7 @@ export default class CopyNodeReferenceCanvasExtension extends CanvasExtension {
       callback: () => CopyNodeReferenceCanvasExtension.copyWikilinkToNode(canvas.view.file, selectionNodeData[0]!)
     }
 
-    const popupMenuOption = CanvasHelper.createPopupMenuOption(menuOption);
+    const popupMenuOption = CanvasHelper.createPopupMenuOption(menuOption)
     CanvasHelper.addPopupMenuOption(canvas, popupMenuOption)
   }
 
