@@ -14,6 +14,7 @@ export default class MigrationHelper {
       const globalInterdimensionalEdges: { [portalId: string]: CanvasEdgeData[] } = {}
 
       // Rename node properties
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- We do not have typings for old canvas data
       for (const node of (canvas.nodes ?? []) as any[]) {
         node.dynamicHeight = node.autoResizeHeight
         delete node.autoResizeHeight
@@ -49,7 +50,7 @@ export default class MigrationHelper {
             }
 
             // Add edges to the global interdimensional edges
-            globalInterdimensionalEdges[portalId].push(...edges)
+            globalInterdimensionalEdges[portalId]?.push(...edges)
           }
 
           delete node.edgesToNodeFromPortal
@@ -57,6 +58,7 @@ export default class MigrationHelper {
       }
 
       // Distribute global interdimensional edges to portals
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- We do not have typings for old canvas data
       for (const node of (canvas.nodes ?? []) as any[]) {
         if (!(node.id in globalInterdimensionalEdges)) continue
         node.interdimensionalEdges = globalInterdimensionalEdges[node.id]
@@ -64,7 +66,7 @@ export default class MigrationHelper {
 
       // Add metadata node
       canvas.metadata ??= {
-        version: TARGET_SPEC_VERSION, 
+        version: TARGET_SPEC_VERSION,
         frontmatter: {},
         startNode: startNode
       }
@@ -72,7 +74,7 @@ export default class MigrationHelper {
       return { version: TARGET_SPEC_VERSION, canvas: canvas }
     }
   }
-  
+
   static needsMigration(canvas: CanvasData): boolean {
     return canvas.metadata?.version !== CURRENT_SPEC_VERSION
   }
@@ -95,6 +97,7 @@ export default class MigrationHelper {
       const { version: newVersion, canvas: migratedCanvas } = migrationFunction(canvas)
 
       // Update version and canvas
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- We hardcode the version in the types so we need to cast it here
       version = newVersion as any
       canvas = migratedCanvas
 

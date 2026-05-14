@@ -22,7 +22,7 @@ export class AbstractSelectionModal extends FuzzySuggestModal<string> {
   getItems(): string[] { return this.suggestions }
   getItemText(item: string): string { return item }
 
-  onChooseItem(item: string, evt: MouseEvent | KeyboardEvent): void { }
+  onChooseItem(_item: string, _evt: MouseEvent | KeyboardEvent): void { }
   awaitInput(): Promise<string> {
     return new Promise((resolve, _reject) => {
       this.onChooseItem = (item: string) => { resolve(item) }

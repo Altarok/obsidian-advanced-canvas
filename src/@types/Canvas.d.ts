@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- Unknown typings remaining */
 import { App, ItemView, TFile, WorkspaceLeaf } from "obsidian"
 import { AnyCanvasNodeData, CanvasData, CanvasEdgeData, CanvasMetadata, CanvasNodeData, EndType, Side } from "./AdvancedJsonCanvas"
 

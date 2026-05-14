@@ -10,8 +10,8 @@ const ROUNDED_EDGE_RADIUS = 5
 export default class EdgePathfindingSquare extends EdgePathfindingMethod {
   getPath(): EdgePath | null {
     const pathArray: Position[] = []
-    let center: Position = { 
-      x: (this.fromPos.x + this.toPos.x) / 2, 
+    let center: Position = {
+      x: (this.fromPos.x + this.toPos.x) / 2,
       y: (this.fromPos.y + this.toPos.y) / 2
     }
 
@@ -32,7 +32,7 @@ export default class EdgePathfindingSquare extends EdgePathfindingMethod {
       this.toSide === "bottom" && idealCenter.y < this.toPos.y ||
       this.toSide === "left" && idealCenter.x > this.toPos.x ||
       this.toSide === "right" && idealCenter.x < this.toPos.x
-  
+
     if (this.fromSide === this.toSide) {
       const uPath = this.getUPath(this.fromPos, this.toPos, this.fromSide, this.toSide)
 
@@ -117,7 +117,7 @@ export default class EdgePathfindingSquare extends EdgePathfindingMethod {
           pathArray.push(firstFromDetourPoint)
           pathArray.push(...uPath.pathArray)
 
-          center = pathArray[Math.floor(pathArray.length / 2)]
+          center = pathArray[Math.floor(pathArray.length / 2)]!
         } else {
           if (isPathCollidingAtFrom) {
             const direction = BBoxHelper.direction(this.fromSide)
@@ -145,7 +145,7 @@ export default class EdgePathfindingSquare extends EdgePathfindingMethod {
               x: BBoxHelper.getCenterOfBBoxSide(this.fromNodeBBox, connectionSide).x,
               y: firstFromDetourPoint.y
             }
-            
+
             const path = useUPath ?
               this.getUPath(secondFromDetourPoint, this.toPos, this.toSide, this.toSide) :
               this.getZPath(secondFromDetourPoint, this.toPos, this.toSide, this.toSide)
@@ -155,8 +155,8 @@ export default class EdgePathfindingSquare extends EdgePathfindingMethod {
             pathArray.push(...path.pathArray)
 
             center = path.center
-          } 
-          
+          }
+
           if (isPathCollidingAtTo) {
             const direction = BBoxHelper.direction(this.toSide)
 
@@ -184,15 +184,15 @@ export default class EdgePathfindingSquare extends EdgePathfindingMethod {
               y: firstToDetourPoint.y
             }
 
-            const path = useUPath ? 
+            const path = useUPath ?
               this.getUPath(this.fromPos, secondToDetourPoint, this.fromSide, this.fromSide) :
               this.getZPath(this.fromPos, secondToDetourPoint, this.fromSide, this.fromSide)
-            
+
             pathArray.push(...path.pathArray)
             pathArray.push(secondToDetourPoint)
             pathArray.push(firstToDetourPoint)
             pathArray.push(this.toPos)
-            
+
             center = path.center
           }
         }
@@ -204,9 +204,9 @@ export default class EdgePathfindingSquare extends EdgePathfindingMethod {
           this.toPos
         )
 
-        center = { 
-          x: pathArray[1].x,
-          y: pathArray[1].y
+        center = {
+          x: pathArray[1]!.x,
+          y: pathArray[1]!.y
         }
       }
     }

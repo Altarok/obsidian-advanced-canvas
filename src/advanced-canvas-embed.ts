@@ -1,4 +1,4 @@
-import { Component, EmbedContext, MarkdownRenderer, TFile } from "obsidian"
+import App, { Component, EmbedContext, MarkdownRenderer, TFile } from "obsidian"
 import { CanvasData, CanvasFileNodeData, CanvasGroupNodeData, CanvasTextNodeData } from "./@types/AdvancedJsonCanvas"
 
 export default class AdvancedCanvasEmbed extends Component {
@@ -26,7 +26,7 @@ export default class AdvancedCanvasEmbed extends Component {
 
   private onModifyCallback = (file: TFile) => {
     if (file.path !== this.file.path) return
-    this.loadFile()
+    void this.loadFile()
   }
 
   async loadFile() {
@@ -55,6 +55,6 @@ export default class AdvancedCanvasEmbed extends Component {
 
     this.context.containerEl.classList.add("markdown-embed")
     this.context.containerEl.empty() // Clear the container (for re-rendering on changes)
-    MarkdownRenderer.render(this.context.app, nodeContent, this.context.containerEl, this.file.path, this)
+    await MarkdownRenderer.render(this.context.app as unknown as App, nodeContent, this.context.containerEl, this.file.path, this)
   }
 }

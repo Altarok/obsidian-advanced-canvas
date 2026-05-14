@@ -11,8 +11,9 @@ export default abstract class CanvasExtension {
     this.plugin = plugin
 
     const isEnabled = this.isEnabled()
-    
-    if (!(isEnabled === true || this.plugin.settings.getSetting(isEnabled as any))) return
+
+    if (!(isEnabled === true || this.plugin.settings.getSetting(isEnabled as keyof AdvancedCanvasPluginSettingsValues)))
+      return
 
     this.init()
   }

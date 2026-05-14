@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- It's a generic wrapper */
 import { around } from "monkey-around"
 import AdvancedCanvasPlugin from "src/main"
 import { Plugin } from "obsidian"
@@ -35,7 +36,7 @@ export default abstract class Patcher {
 
   constructor(plugin: AdvancedCanvasPlugin) {
     this.plugin = plugin
-    this.patch()
+    void this.patch()
   }
 
   protected abstract patch(): Promise<void>
@@ -43,7 +44,7 @@ export default abstract class Patcher {
   protected static async waitForMapValueLookup<T>(map: Record<string, any>, viewType: string, patch: (view: T) => void): Promise<T> {
     return new Promise(resolve => {
       const uninstaller = around(map, {
-        [viewType]: (next: any) => function (...args: any): any {
+        [viewType]: next => function (this: any, ...args: any[]): void {
           const view = next.call(this, ...args)
           patch(view)
 
@@ -105,7 +106,7 @@ export default abstract class Patcher {
       }
     }
 
-    const uninstaller = around(target as any, patches)
+    const uninstaller = around(target, patches)
     if (uninstallers) uninstallers.push(uninstaller)
     plugin.register(uninstaller)
 

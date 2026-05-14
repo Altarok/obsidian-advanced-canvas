@@ -12,8 +12,8 @@ export default class LinkSuggestionsPatcher extends Patcher {
     if (!suggestManager) return console.warn("LinkSuggestionsPatcher: No suggest manager found.")
 
     Patcher.patchThisAndPrototype<SuggestManager>(this.plugin, suggestManager, {
-      getHeadingSuggestions: Patcher.OverrideExisting(next => async function (context: any, path: string, subpath: string) {
-        const result = await next.call(this, context, path, subpath) as Suggestion[]
+      getHeadingSuggestions: Patcher.OverrideExisting(next => async function (context: unknown, path: string, subpath: string) {
+        const result = await next.call(this, context, path, subpath)
 
         // Don't add suggestions if the file is not a canvas file
         if (!path.endsWith(".canvas")) return result

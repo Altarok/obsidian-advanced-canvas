@@ -22,7 +22,7 @@ export default class BetterDefaultSettingsCanvasExtension  extends CanvasExtensi
 
     this.plugin.registerEvent(this.plugin.app.workspace.on(
       'advanced-canvas:double-click',
-      (canvas: Canvas, event: MouseEvent, preventDefault: { value: boolean }) => this.onDoubleClick(canvas, event, preventDefault)
+      (canvas: Canvas, event: MouseEvent, preventDefault: { value: boolean }) => void this.onDoubleClick(canvas, event, preventDefault)
     ))
 
     this.plugin.registerEvent(this.plugin.app.workspace.on(
@@ -35,7 +35,7 @@ export default class BetterDefaultSettingsCanvasExtension  extends CanvasExtensi
 
     this.plugin.registerEvent(this.plugin.app.workspace.on(
       'advanced-canvas:edge-created',
-      (canvas: Canvas, edge: CanvasEdge) => this.applyDefaultEdgeStyles(canvas, edge)
+      (canvas: Canvas, edge: CanvasEdge) => void this.applyDefaultEdgeStyles(canvas, edge)
     ))
 
     this.plugin.registerEvent(this.plugin.app.workspace.on(

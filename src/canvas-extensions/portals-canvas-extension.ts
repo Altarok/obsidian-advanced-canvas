@@ -71,12 +71,14 @@ export default class PortalsCanvasExtension extends CanvasExtension {
     this.plugin.registerEvent(this.plugin.app.workspace.on(
       'advanced-canvas:data-loaded:before',
       (canvas: Canvas, data: CanvasData, setData: (data: CanvasData) => void) => {
-        this.onSetData(canvas, data)
-          .then((newData: CanvasData) => {
-            // Skip if the data didn't change
-            if (newData.nodes.length === data.nodes.length && newData.edges.length === data.edges.length) return
-            setData(newData)
-          })
+        this.onSetData(canvas, data).then((newData: CanvasData) => {
+          // Skip if the data didn't change
+          if (newData.nodes.length === data.nodes.length && newData.edges.length === data.edges.length) return
+          setData(newData)
+        }).catch((error) => {
+          console.error('Error loading portal data:', error)
+          new Notice('An error occurred while loading portal data. Please check console for details.')
+        })
       }
     ))
   }

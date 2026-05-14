@@ -29,7 +29,8 @@ export default class CanvasHelper {
   }
 
   static createControlMenuButton(menuOption: MenuOption): HTMLElement {
-    const quickSetting = document.createElement('div')
+    /* eslint-disable-next-line obsidianmd/prefer-create-el -- So we can return it */
+    const quickSetting = activeDocument.createElement("div")
     if (menuOption.id) quickSetting.id = menuOption.id
     quickSetting.classList.add('canvas-control-item')
     setIcon(quickSetting, menuOption.icon)
@@ -45,7 +46,8 @@ export default class CanvasHelper {
   }
 
   static createCardMenuOption(canvas: Canvas, menuOption: MenuOption, previewNodeSize: () => Size, onPlaced: (canvas: Canvas, pos: Position) => void): HTMLElement {
-    const menuOptionElement = document.createElement('div')
+    /* eslint-disable-next-line obsidianmd/prefer-create-el -- So we can return it */
+    const menuOptionElement = activeDocument.createElement("div")
     if (menuOption.id) menuOptionElement.id = menuOption.id
     menuOptionElement.classList.add('canvas-card-menu-button')
     menuOptionElement.classList.add('mod-draggable')
@@ -72,7 +74,8 @@ export default class CanvasHelper {
   }
 
   static createPopupMenuOption(menuOption: MenuOption): HTMLElement {
-    const menuOptionElement = document.createElement('button')
+    /* eslint-disable-next-line obsidianmd/prefer-create-el -- So we can return it */
+    const menuOptionElement = activeDocument.createElement('button')
     if (menuOption.id) menuOptionElement.id = menuOption.id
     menuOptionElement.classList.add('clickable-icon')
     setIcon(menuOptionElement, menuOption.icon)
@@ -97,7 +100,8 @@ export default class CanvasHelper {
         menuOptionElement.classList.add('is-active')
 
         // Add popup menu
-        const submenu = document.createElement('div')
+        const submenu = menuOptionElement.parentElement?.createDiv()
+        if (!submenu) return
         submenu.id = submenuId
         submenu.classList.add('canvas-submenu')
 
@@ -106,8 +110,6 @@ export default class CanvasHelper {
           const subMenuOptionElement = this.createPopupMenuOption(subMenuOption)
           submenu.appendChild(subMenuOptionElement)
         }
-
-        menuOptionElement.parentElement?.appendChild(submenu)
       }
     })
 
@@ -125,7 +127,7 @@ export default class CanvasHelper {
     }
 
     const sisterElement = index >= 0 ? popupMenuEl.children[index] : popupMenuEl.children[popupMenuEl.children.length + index]
-    popupMenuEl.insertAfter(element, sisterElement)
+    popupMenuEl.insertAfter(element, sisterElement!)
   }
 
   static getCenterCoordinates(canvas: Canvas, nodeSize: Size): Position {
@@ -139,11 +141,10 @@ export default class CanvasHelper {
 
   static getBBox(canvasElements: (CanvasNode | CanvasNodeData | CanvasEdge)[]) {
     const bBoxes = canvasElements.map(element => {
-      if ((element as any).getBBox) return (element as CanvasNode).getBBox()
+      if ('getBBox' in element) return (element as CanvasNode).getBBox()
 
-      const nodeData = (element as CanvasNodeData)
-      if (nodeData.x !== undefined && nodeData.y !== undefined && nodeData.width !== undefined && nodeData.height !== undefined)
-        return { minX: nodeData.x, minY: nodeData.y, maxX: nodeData.x + nodeData.width, maxY: nodeData.y + nodeData.height }
+      if (element.x !== undefined && element.y !== undefined && element.width !== undefined && element.height !== undefined)
+        return { minX: element.x, minY: element.y, maxX: element.x + element.width, maxY: element.y + element.height }
 
       return null
     }).filter(bbox => bbox !== null) as BBox[]
@@ -225,15 +226,12 @@ export default class CanvasHelper {
     // Remove previous style menu
     popupMenuElement.querySelector(`#${STYLE_MENU_ID}`)?.remove()
 
-    const styleMenuButtonElement = document.createElement('button')
+    const styleMenuButtonElement = popupMenuElement.createEl('button')
     styleMenuButtonElement.id = STYLE_MENU_ID
     styleMenuButtonElement.classList.add('clickable-icon')
 
     setIcon(styleMenuButtonElement, 'paintbrush')
     setTooltip(styleMenuButtonElement, 'Style', { placement: 'top' })
-
-    // Add style menu to popup menu
-    popupMenuElement.appendChild(styleMenuButtonElement)
 
     // Add click event
     styleMenuButtonElement.addEventListener('click', () => {
@@ -245,13 +243,13 @@ export default class CanvasHelper {
         return
       }
 
-      const styleMenuDropdownElement = document.createElement('div')
+      const styleMenuDropdownElement = popupMenuElement.createDiv()
       styleMenuDropdownElement.id = STYLE_MENU_DROPDOWN_ID
       styleMenuDropdownElement.classList.add('menu')
 
       // Position correctly
-      styleMenuDropdownElement.style.position = 'absolute'
-      styleMenuDropdownElement.style.maxHeight = 'initial'
+      styleMenuDropdownElement.style.position = 'absolute' /* eslint-disable-line obsidianmd/no-static-styles-assignment -- Should be dynamic */
+      styleMenuDropdownElement.style.maxHeight = 'initial' /* eslint-disable-line obsidianmd/no-static-styles-assignment -- Should be dynamic */
 
       styleMenuDropdownElement.style.top = `${popupMenuElement.getBoundingClientRect().height}px`
 
@@ -267,12 +265,12 @@ export default class CanvasHelper {
 
       // Add style options
       for (const stylableAttribute of stylableAttributes) {
-        const stylableAttributeElement = document.createElement('div')
+        const stylableAttributeElement = styleMenuDropdownElement.createDiv()
         stylableAttributeElement.classList.add('menu-item')
         stylableAttributeElement.classList.add('tappable')
 
         // Add icon
-        const iconElement = document.createElement('div')
+        const iconElement = stylableAttributeElement.createDiv()
         iconElement.classList.add('menu-item-icon')
 
         let selectedStyle = stylableAttribute.options
@@ -282,22 +280,15 @@ export default class CanvasHelper {
 
         setIcon(iconElement, selectedStyle.icon)
 
-        stylableAttributeElement.appendChild(iconElement)
-
         // Add label
-        const labelElement = document.createElement('div')
+        const labelElement = stylableAttributeElement.createDiv()
         labelElement.classList.add('menu-item-title')
         labelElement.textContent = stylableAttribute.label
-        stylableAttributeElement.appendChild(labelElement)
 
         // Add expand icon
-        const expandIconElement = document.createElement('div')
+        const expandIconElement = stylableAttributeElement.createDiv()
         expandIconElement.classList.add('menu-item-icon')
         setIcon(expandIconElement, 'chevron-right')
-        stylableAttributeElement.appendChild(expandIconElement)
-
-        // Append to dropdown
-        styleMenuDropdownElement.appendChild(stylableAttributeElement)
 
         // Add hover effect
         stylableAttributeElement.addEventListener('pointerenter', () => {
@@ -313,13 +304,13 @@ export default class CanvasHelper {
           // Remove previous submenu
           popupMenuElement.querySelector(`#${STYLE_MENU_DROPDOWN_SUBMENU_ID}`)?.remove()
 
-          const styleMenuDropdownSubmenuElement = document.createElement('div')
+          const styleMenuDropdownSubmenuElement = popupMenuElement.createDiv()
           styleMenuDropdownSubmenuElement.id = STYLE_MENU_DROPDOWN_SUBMENU_ID
           styleMenuDropdownSubmenuElement.classList.add('menu')
 
           // Position correctly
-          styleMenuDropdownSubmenuElement.style.position = 'absolute'
-          styleMenuDropdownSubmenuElement.style.maxHeight = 'initial'
+          styleMenuDropdownSubmenuElement.style.position = 'absolute' /* eslint-disable-line obsidianmd/no-static-styles-assignment -- Should be dynamic */
+          styleMenuDropdownSubmenuElement.style.maxHeight = 'initial' /* eslint-disable-line obsidianmd/no-static-styles-assignment -- Should be dynamic */
 
           const topOffset = parseFloat(window.getComputedStyle(styleMenuDropdownElement).getPropertyValue('padding-top')) + (styleMenuDropdownElement.offsetHeight - styleMenuDropdownElement.clientHeight) / 2
           styleMenuDropdownSubmenuElement.style.top = `${stylableAttributeElement.getBoundingClientRect().top - topOffset - popupMenuElement.getBoundingClientRect().top}px`
@@ -358,44 +349,36 @@ export default class CanvasHelper {
             if (selectedStyle === styleOption) {
               styleMenuDropdownSubmenuOptionElement.classList.add('mod-selected')
 
-              const selectedIconElement = document.createElement('div')
+              const selectedIconElement = styleMenuDropdownSubmenuOptionElement.createDiv()
               selectedIconElement.classList.add('menu-item-icon')
               selectedIconElement.classList.add('mod-selected')
 
               setIcon(selectedIconElement, 'check')
-              styleMenuDropdownSubmenuOptionElement.appendChild(selectedIconElement)
             }
 
             // Add to dropdown submenu
             styleMenuDropdownSubmenuElement.appendChild(styleMenuDropdownSubmenuOptionElement)
           }
-
-          // Append to body
-          popupMenuElement.appendChild(styleMenuDropdownSubmenuElement)
         })
       }
-
-      // Append to body
-      popupMenuElement.appendChild(styleMenuDropdownElement)
     })
   }
 
   static createDropdownOptionElement(menuOption: MenuOption): HTMLElement {
-    const menuDropdownOptionElement = document.createElement('div')
+    /* eslint-disable-next-line obsidianmd/prefer-create-el -- So we can return it */
+    const menuDropdownOptionElement = activeDocument.createElement('div')
     menuDropdownOptionElement.classList.add('menu-item')
     menuDropdownOptionElement.classList.add('tappable')
 
     // Add icon
-    const iconElement = document.createElement('div')
+    const iconElement = menuDropdownOptionElement.createDiv()
     iconElement.classList.add('menu-item-icon')
     setIcon(iconElement, menuOption.icon)
-    menuDropdownOptionElement.appendChild(iconElement)
 
     // Add label
-    const labelElement = document.createElement('div')
+    const labelElement = menuDropdownOptionElement.createDiv()
     labelElement.classList.add('menu-item-title')
     labelElement.textContent = menuOption.label
-    menuDropdownOptionElement.appendChild(labelElement)
 
     // Add hover effect
     menuDropdownOptionElement.addEventListener('pointerenter', () => {
@@ -415,7 +398,8 @@ export default class CanvasHelper {
   }
 
   static createDropdownSeparatorElement(): HTMLElement {
-    const separatorElement = document.createElement('div')
+    /* eslint-disable-next-line obsidianmd/prefer-create-el -- So we can return it */
+    const separatorElement = activeDocument.createElement('div')
     separatorElement.classList.add('menu-separator')
 
     return separatorElement

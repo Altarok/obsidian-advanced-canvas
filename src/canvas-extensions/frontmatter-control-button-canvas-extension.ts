@@ -15,7 +15,7 @@ export default class FrontmatterControlButtonCanvasExtension extends CanvasExten
 
   private addQuickSettings(canvas: Canvas) {
     if (!canvas) return
-    
+
     const settingsContainer = canvas.quickSettingsButton?.parentElement
     if (!settingsContainer) return
 
@@ -36,11 +36,11 @@ export default class FrontmatterControlButtonCanvasExtension extends CanvasExten
           let propertiesLeaf = this.plugin.app.workspace.getLeavesOfType('file-properties').first() ?? null
           if (!propertiesLeaf) {
             propertiesLeaf = this.plugin.app.workspace.getRightLeaf(false)
-            propertiesLeaf?.setViewState({ type: 'file-properties' })
+            void propertiesLeaf?.setViewState({ type: 'file-properties' })
           }
 
           // Reveal the properties view
-          if (propertiesLeaf) this.plugin.app.workspace.revealLeaf(propertiesLeaf)
+          if (propertiesLeaf) void this.plugin.app.workspace.revealLeaf(propertiesLeaf)
         }
       })
     )

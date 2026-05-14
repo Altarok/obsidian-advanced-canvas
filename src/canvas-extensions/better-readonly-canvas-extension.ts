@@ -107,17 +107,17 @@ export default class BetterReadonlyCanvasExtension extends CanvasExtension {
   private createToggle(menuOption: MenuOption, settingKey: keyof AdvancedCanvasPluginSettingsValues): HTMLElement {
     const toggle = CanvasHelper.createControlMenuButton({
       ...menuOption,
-      callback: () => (async () => {
+      callback: () => void (async () => {
         const newValue = !this.plugin.settings.getSetting(settingKey)
         await this.plugin.settings.setSetting({ [settingKey]: newValue })
 
-        toggle.dataset.toggled = this.plugin.settings.getSetting(settingKey).toString()
+        toggle.dataset.toggled = JSON.stringify(this.plugin.settings.getSetting(settingKey))
         menuOption.callback?.call(this)
       })()
     })
     toggle.classList.add('show-while-readonly')
 
-    toggle.dataset.toggled = this.plugin.settings.getSetting(settingKey).toString()
+    toggle.dataset.toggled = JSON.stringify(this.plugin.settings.getSetting(settingKey))
 
     return toggle
   }

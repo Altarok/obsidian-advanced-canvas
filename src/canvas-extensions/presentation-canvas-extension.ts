@@ -8,7 +8,7 @@ const START_SLIDE_NAME = 'Start Slide'
 const DEFAULT_SLIDE_NAME = 'New Slide'
 
 export default class PresentationCanvasExtension extends CanvasExtension {
-  savedViewport: any = null
+  savedViewport: { x: number, y: number, zoom: number } = { x: 0, y: 0, zoom: 1 }
   isPresentationMode = false
   visitedNodeIds: string[] = []
   fullscreenModalObserver: MutationObserver | null = null
@@ -50,7 +50,7 @@ export default class PresentationCanvasExtension extends CanvasExtension {
       checkCallback: CanvasHelper.canvasCommand(
         this.plugin,
         (canvas: Canvas) => !canvas.readonly && !this.isPresentationMode && canvas.getSelectionData().nodes.length === 1,
-        (canvas: Canvas) => this.setStartNode(canvas, canvas.nodes.get(canvas.getSelectionData().nodes[0].id))
+        (canvas: Canvas) => this.setStartNode(canvas, canvas.nodes.get(canvas.getSelectionData().nodes[0]!.id))
       )
     })
 
@@ -60,7 +60,7 @@ export default class PresentationCanvasExtension extends CanvasExtension {
       checkCallback: CanvasHelper.canvasCommand(
         this.plugin,
         (_canvas: Canvas) => !this.isPresentationMode,
-        (canvas: Canvas) => this.startPresentation(canvas)
+        (canvas: Canvas) => void this.startPresentation(canvas)
       )
     })
 
@@ -70,7 +70,7 @@ export default class PresentationCanvasExtension extends CanvasExtension {
       checkCallback: CanvasHelper.canvasCommand(
         this.plugin,
         (_canvas: Canvas) => !this.isPresentationMode,
-        (canvas: Canvas) => this.startPresentation(canvas, true)
+        (canvas: Canvas) => void this.startPresentation(canvas, true)
       )
     })
 
@@ -139,7 +139,7 @@ export default class PresentationCanvasExtension extends CanvasExtension {
     const selectedNodesData = canvas.getSelectionData().nodes
     if (canvas.readonly || selectedNodesData.length !== 1 || canvas.selection.size > 1) return
 
-    const selectedNode = canvas.nodes.get(selectedNodesData[0].id)
+    const selectedNode = canvas.nodes.get(selectedNodesData[0]!.id)
     if (!selectedNode) return
 
     CanvasHelper.addPopupMenuOption(
@@ -216,7 +216,6 @@ export default class PresentationCanvasExtension extends CanvasExtension {
 
     const toNodeBBox = CanvasHelper.getSmallestAllowedZoomBBox(canvas, toNode.getBBox())
     const toNodeBBoxPadded = removePadding ? toNodeBBox : BBoxHelper.enlargeBBox(toNodeBBox, 50)
-    console.log({ toNodeBBox, toNodeBBoxPadded })
 
     if (animationDurationMs > 0 && fromNode) {
       const animationIntensity = this.plugin.settings.getSetting('slideTransitionAnimationIntensity')
@@ -259,7 +258,7 @@ export default class PresentationCanvasExtension extends CanvasExtension {
       zoom: canvas.tZoom,
     }
 
-    const shouldEnterFullscreen = this.plugin.settings.getSetting('fullscreenPresentationEnabled') as boolean
+    const shouldEnterFullscreen = this.plugin.settings.getSetting('fullscreenPresentationEnabled')
     this.presentationUsesFullscreen = shouldEnterFullscreen
 
     canvas.wrapperEl.focus()
@@ -306,19 +305,19 @@ export default class PresentationCanvasExtension extends CanvasExtension {
       this.fullscreenModalObserver = new MutationObserver((mutationRecords) => {
         mutationRecords.forEach((mutationRecord) => {
           mutationRecord.addedNodes.forEach((node) => {
-            document.body.removeChild(node)
-            document.fullscreenElement?.appendChild(node)
+            activeDocument.body.removeChild(node)
+            activeDocument.fullscreenElement?.appendChild(node)
           })
         })
 
-        const inputField = document.querySelector('.prompt-input') as HTMLInputElement | null
+        const inputField = activeDocument.querySelector('.prompt-input') as HTMLInputElement
         if (inputField) inputField.focus()
       })
-      this.fullscreenModalObserver.observe(document.body, { childList: true })
+      this.fullscreenModalObserver.observe(activeDocument.body, { childList: true })
 
       // Register event handler for exiting presentation mode
-      canvas.wrapperEl.onfullscreenchange = (_e: any) => {
-        if (document.fullscreenElement) return
+      canvas.wrapperEl.onfullscreenchange = (_e: Event) => {
+        if (activeDocument.fullscreenElement) return
         this.endPresentation(canvas)
       }
     }
@@ -336,7 +335,7 @@ export default class PresentationCanvasExtension extends CanvasExtension {
     const startNode = canvas.nodes.get(startNodeId)
     if (!startNode) return
 
-    this.animateNodeTransition(canvas, undefined, startNode)
+    void this.animateNodeTransition(canvas, undefined, startNode)
   }
 
   private endPresentation(canvas: Canvas) {
@@ -349,7 +348,7 @@ export default class PresentationCanvasExtension extends CanvasExtension {
       canvas.wrapperEl.onfullscreenchange = null
 
       // Exit fullscreen mode
-      if (document.fullscreenElement) document.exitFullscreen()
+      if (activeDocument.fullscreenElement) void activeDocument.exitFullscreen()
     }
     canvas.wrapperEl.onkeydown = null
 
@@ -398,15 +397,15 @@ export default class PresentationCanvasExtension extends CanvasExtension {
 
       // Select next edge
       const nextEdge = sortedEdges[traversedEdgesCount]
-      toNode = nextEdge.to.node
+      toNode = nextEdge?.to?.node
     }
 
     if (toNode) {
       this.visitedNodeIds.push(toNode.getData().id)
-      this.animateNodeTransition(canvas, fromNode, toNode)
+      void this.animateNodeTransition(canvas, fromNode, toNode)
     } else {
       // No more nodes left, animate to same node
-      this.animateNodeTransition(canvas, fromNode, fromNode)
+      void this.animateNodeTransition(canvas, fromNode, fromNode)
     }
   }
 
@@ -426,6 +425,6 @@ export default class PresentationCanvasExtension extends CanvasExtension {
       this.visitedNodeIds.push(fromNodeId)
     }
 
-    this.animateNodeTransition(canvas, fromNode, toNode)
+    void this.animateNodeTransition(canvas, fromNode, toNode)
   }
 }

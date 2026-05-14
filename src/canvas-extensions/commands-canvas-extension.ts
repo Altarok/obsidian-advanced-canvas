@@ -41,7 +41,7 @@ export default class CommandsCanvasExtension extends CanvasExtension {
       checkCallback: CanvasHelper.canvasCommand(
         this.plugin,
         (canvas: Canvas) => !canvas.readonly,
-        (canvas: Canvas) => this.createFileNode(canvas)
+        (canvas: Canvas) => void this.createFileNode(canvas)
       )
     })
 
@@ -171,7 +171,7 @@ export default class CommandsCanvasExtension extends CanvasExtension {
             .filter(node => node !== undefined) as CanvasNode[]
           if (selectedNodes.length !== 2) return
 
-          const [nodeA, nodeB] = selectedNodes
+          const [nodeA, nodeB] = selectedNodes as [CanvasNode, CanvasNode]
           const nodeAData = nodeA.getData()
           const nodeBData = nodeB.getData()
 
@@ -197,9 +197,9 @@ export default class CommandsCanvasExtension extends CanvasExtension {
           if (!nodeData) return
 
           const wikilink = `[[${file.path}#${nodeData.id}|${file.name} (${TextHelper.toTitleCase(nodeData.type)} node)]]`
-          navigator.clipboard.writeText(wikilink)
-
-          new Notice("Copied wikilink to node to clipboard.", 2000)
+          navigator.clipboard.writeText(wikilink).then(() =>
+            new Notice("Copied wikilink to node to clipboard.", 2000)
+          ).catch(() => new Notice("Failed to copy wikilink to node to clipboard.", 2000))
         }
       )
     })
@@ -253,7 +253,7 @@ export default class CommandsCanvasExtension extends CanvasExtension {
 
           for (const outgoingLink of outgoingLinks) {
             if (existingFileNodes.has(outgoingLink)) continue
-            this.createFileNode(canvas, outgoingLink)
+            void this.createFileNode(canvas, outgoingLink)
           }
         }
       )
@@ -312,7 +312,7 @@ export default class CommandsCanvasExtension extends CanvasExtension {
 
           for (const backlink of backlinks) {
             if (existingFileNodes.has(backlink)) continue
-            this.createFileNode(canvas, backlink)
+            void this.createFileNode(canvas, backlink)
           }
         }
       )

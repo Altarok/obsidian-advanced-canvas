@@ -8,17 +8,17 @@ export default class BasesTableViewPatcher extends Patcher {
     const bases: BasesPlugin = this.plugin.app.internalPlugins.getEnabledPluginById("bases")
     if (!bases) return // Core plugin not enabled
 
-    this.patchViewFactory(bases)
+    void this.patchViewFactory(bases)
   }
 
   private async patchViewFactory(bases: BasesPlugin) {
-    const that = this
+    const that = this // eslint-disable-line @typescript-eslint/no-this-alias -- For patcher
 
     await Patcher.patchOnce<BasesViewRegistrationEntry<BasesTableView>, BasesTableView>(this.plugin, bases.registrations.table, resolve => ({
-      factory: Patcher.OverrideExisting(next => function (...args: any): BasesTableView {
+      factory: Patcher.OverrideExisting(next => function (...args: unknown[]): BasesTableView {
         const view = next.call(this, ...args)
 
-        that.patchTableView(view)
+        void that.patchTableView(view)
         resolve(view)
 
         return view
@@ -27,16 +27,16 @@ export default class BasesTableViewPatcher extends Patcher {
   }
 
   private async patchTableView(basesView: BasesTableView) {
-    const that = this
+    const that = this // eslint-disable-line @typescript-eslint/no-this-alias -- For patcher
 
     await Patcher.patchOnce<BasesTableView, BasesTableRow>(this.plugin, basesView, resolve => ({
-      updateVirtualDisplay: Patcher.OverrideExisting(next => function (...args: any): void {
+      updateVirtualDisplay: Patcher.OverrideExisting(next => function (...args: unknown[]): void {
         const result = next.call(this, ...args)
 
         if (this.rows.length > 0) {
           const row = this.rows.first()!
 
-          that.patchTableRow(row)
+          void that.patchTableRow(row)
           resolve(row)
         }
 
@@ -46,16 +46,16 @@ export default class BasesTableViewPatcher extends Patcher {
   }
 
   private async patchTableRow(row: BasesTableRow) {
-    const that = this
+    const that = this // eslint-disable-line @typescript-eslint/no-this-alias -- For patcher
 
     await Patcher.patchOnce<BasesTableRow, BasesTableCell>(this.plugin, row, resolve => ({
-      render: Patcher.OverrideExisting(next => function (...args: any): void {
+      render: Patcher.OverrideExisting(next => function (...args: unknown[]): void {
         let result = next.call(this, ...args)
 
         if (this.cells.length > 0) {
           const cell = this.cells.first()!
 
-          that.patchTableCell(cell)
+          void that.patchTableCell(cell)
           resolve(cell)
 
           // Re-render the first cell

@@ -9,7 +9,7 @@ export default class TaskQueue {
   async add(task: () => Promise<void> | void) {
     return new Promise<void>(resolve => {
       this.queue.push([resolve, task])
-      if (!this.running) this.run()
+      if (!this.running) void this.run()
     })
   }
 

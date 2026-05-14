@@ -12,18 +12,19 @@ export default class MetadataCachePatcher extends Patcher {
     if (!this.plugin.settings.getSetting('canvasMetadataCompatibilityEnabled')) return
 
     Patcher.patchPrototype<ExtendedMetadataCache>(this.plugin, this.plugin.app.metadataCache, {
-      getCache: Patcher.OverrideExisting(next => function (filepath: string, ...args: any[]): ExtendedCachedMetadata | null {
+      getCache: Patcher.OverrideExisting(next => function (filepath: string, ...args: unknown[]): ExtendedCachedMetadata | null {
         // Bypass the "md" extension check by handling the "canvas" extension here
         if (FilepathHelper.extension(filepath) === 'canvas') {
-          if (!this.fileCache.hasOwnProperty(filepath)) return null
+          if (!Object.prototype.hasOwnProperty.call(this.fileCache, filepath))
+            return null
 
-          const hash = this.fileCache[filepath].hash
-          return this.metadataCache[hash] || null
+          const hash = this.fileCache[filepath]?.hash
+          return (hash && this.metadataCache[hash]) || null
         }
 
-        return next.call(this, filepath, ...args)
+        return next.call(this, filepath, ...args) as ExtendedCachedMetadata
       }),
-      computeFileMetadataAsync: Patcher.OverrideExisting(next => async function (file: TFile, ...args: any[]) {
+      computeFileMetadataAsync: Patcher.OverrideExisting(next => async function (file: TFile, ...args: unknown[]) {
         if (file instanceof TFile && file?.extension === 'canvas')
           return CanvasMetadataHandler.computeCanvasFileMetadataAsync.call(this, file)
 
@@ -34,7 +35,7 @@ export default class MetadataCachePatcher extends Patcher {
 
         // Run custom logic that triggers 'resolve' and 'resolved' events
         if (FilepathHelper.extension(filepath) === 'canvas')
-          CanvasMetadataHandler.resolveCanvasLinks.call(this, filepath)
+          await CanvasMetadataHandler.resolveCanvasLinks.call(this, filepath)
 
         return result
       })
@@ -52,13 +53,11 @@ class CanvasMetadataHandler {
 
     // Check if cache is stale
     let isStale = true
-    if (!this.fileCache.hasOwnProperty(file.path))
-      this.saveFileCache(file.path, { mtime: 0, size: 0, hash: "" })
+    const cache = this.fileCache[file.path]
+    if (!cache) this.saveFileCache(file.path, { mtime: 0, size: 0, hash: "" })
     else {
-      const cache = this.fileCache[file.path]
-
       const unchanged = cache.mtime === file.stat.mtime && cache.size === file.stat.size
-      const hasMetadataCache = cache.hash && this.metadataCache.hasOwnProperty(cache.hash)
+      const hasMetadataCache = cache.hash && Object.prototype.hasOwnProperty.call(this.metadataCache, cache.hash)
 
       if (unchanged && hasMetadataCache)
         isStale = false
@@ -96,21 +95,21 @@ class CanvasMetadataHandler {
       "changed", file, data, metadata
     )
 
-    const slowIndexingTimeout = setTimeout(() => {
+    const slowIndexingTimeout = window.setTimeout(() => {
       new Notice(`Canvas indexing taking a long time for file ${file.path}`)
     }, 10000)
 
     try {
       metadata = await CanvasMetadataHandler.computeCanvasMetadataAsync.call(this, data)
     } finally {
-      clearTimeout(slowIndexingTimeout)
+      window.clearTimeout(slowIndexingTimeout)
     }
 
     if (metadata) {
       this.saveMetaCache(hash, metadata)
       this.trigger("changed", file, data, metadata)
     } else {
-      console.log("Canvas metadata failed to parse", file)
+      console.error("Canvas metadata failed to parse", file)
     }
   }
 
@@ -138,7 +137,7 @@ class CanvasMetadataHandler {
         return {
           key: key,
           displayText: aliases.length > 0 ? aliases.join('|') : link,
-          link: link,
+          link: link ?? v,
           original: v
         } satisfies FrontmatterLinkCache
       }).filter((v) => v !== null) as FrontmatterLinkCache[]
@@ -175,14 +174,14 @@ class CanvasMetadataHandler {
           start: { line: 0, col: 1, offset: 0 }, // 0 for node
           end: { line: 0, col: 1, offset: index } // index of node
         }
-      }) as ExtendedEmbedCache))
+      }) satisfies ExtendedEmbedCache))
     }))
 
     // Add file nodes as embeds
     for (const [index, node] of (content.nodes ?? []).entries()) {
       if (node.type !== 'file') continue
 
-      const file = (node as CanvasFileNodeData).file!
+      const file = (node as CanvasFileNodeData).file
       if (!file) continue
 
       metadata.embeds.push({

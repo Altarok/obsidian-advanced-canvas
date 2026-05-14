@@ -1,3 +1,4 @@
+/* eslint-disable obsidianmd/rule-custom-message -- It's a debug file... */
 import { BBox, Canvas, CanvasEdge, CanvasNode } from "src/@types/Canvas"
 import AdvancedCanvasPlugin from "src/main"
 
@@ -92,7 +93,7 @@ export default class DebugHelper {
     })
 
     if (duration >= 0) {
-      setTimeout(() => {
+      window.setTimeout(() => {
         canvas.removeNode(node)
       }, duration)
     }

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- Too many anys */
+/* eslint-disable-next-line import/no-extraneous-dependencies -- Included in Obsidian */
 import { EditorView, ViewUpdate } from "@codemirror/view"
 import { around } from "monkey-around"
 import { editorInfoField, requireApiVersion, Side, WorkspaceLeaf } from "obsidian"
@@ -30,7 +32,7 @@ export default class CanvasPatcher extends Patcher {
   }
 
   private patchCanvas(view: CanvasView) {
-    const that = this
+    const that = this // eslint-disable-line @typescript-eslint/no-this-alias -- For patcher
 
     // Patch canvas view
     Patcher.patchPrototype<CanvasView>(this.plugin, view, {
@@ -340,7 +342,7 @@ export default class CanvasPatcher extends Patcher {
   }
 
   private patchNode(node: CanvasNode) {
-    const that = this
+    const that = this // eslint-disable-line @typescript-eslint/no-this-alias -- For patcher
 
     Patcher.patch<CanvasNode>(this.plugin, node, {
       setData: Patcher.OverrideExisting(next => function (data: CanvasNodeData, addHistory?: boolean): void {
@@ -353,10 +355,12 @@ export default class CanvasPatcher extends Patcher {
         }
 
         // Save the data to the file (only if the canvas isn't loading)
+        /* eslint-disable-next-line @typescript-eslint/no-deprecated -- It's my lint and I know the consequences */
         this.canvas.data = this.canvas.getData()
         if (this.initialized) this.canvas.view.requestSave()
 
         // Add to the undo stack
+        /* eslint-disable-next-line @typescript-eslint/no-deprecated -- It's my lint and I know the consequences */
         if (addHistory) this.canvas.pushHistory(this.canvas.data)
 
         return result
@@ -418,7 +422,7 @@ export default class CanvasPatcher extends Patcher {
           that.plugin.app.workspace.offref(addEdgeEventRef)
 
           // Listen for pointer up event
-          document.addEventListener('pointerup', (e: PointerEvent) => {
+          activeDocument.addEventListener('pointerup', (e: PointerEvent) => {
             that.plugin.app.workspace.trigger('advanced-canvas:edge-connection-dragging:after', this.canvas, edge, e, true, "to")
           }, { once: true })
         })
@@ -446,7 +450,7 @@ export default class CanvasPatcher extends Patcher {
   }
 
   private patchEdge(edge: CanvasEdge) {
-    const that = this
+    const that = this // eslint-disable-line @typescript-eslint/no-this-alias -- For patcher
 
     Patcher.patch<CanvasEdge>(this.plugin, edge, {
       setData: Patcher.OverrideExisting(next => function (data: CanvasEdgeData, addHistory?: boolean): void {
@@ -459,6 +463,7 @@ export default class CanvasPatcher extends Patcher {
         }
 
         // Save the data to the file (only if the canvas isn't loading)
+        /* eslint-disable-next-line @typescript-eslint/no-deprecated -- It's my lint and I know the consequences */
         this.canvas.data = this.canvas.getData()
         if (this.initialized) this.canvas.view.requestSave()
 
@@ -500,7 +505,7 @@ export default class CanvasPatcher extends Patcher {
         const draggingSide = Math.hypot(eventPos.x - fromPos.x, eventPos.y - fromPos.y) > Math.hypot(eventPos.x - toPos.x, eventPos.y - toPos.y) ? "to" : "from"
 
         that.plugin.app.workspace.trigger('advanced-canvas:edge-connection-dragging:before', this.canvas, this, e, false, draggingSide, previousEnds)
-        document.addEventListener('pointerup', (e: PointerEvent) => {
+        activeDocument.addEventListener('pointerup', (e: PointerEvent) => {
           that.plugin.app.workspace.trigger('advanced-canvas:edge-connection-dragging:after', this.canvas, this, e, false, draggingSide, previousEnds)
         }, { once: true })
 
@@ -520,11 +525,11 @@ export default class CanvasPatcher extends Patcher {
       return
     }
 
-    const that = this
+    const that = this // eslint-disable-line @typescript-eslint/no-this-alias -- For patcher
 
     // Patch CanvasElement object
     const uninstall = around(canvasElement, {
-      initialize: next => function (...args: any): void {
+      initialize: next => function (this: any, ...args: any): void {
         const result = next.call(this, ...args)
 
         onReady()

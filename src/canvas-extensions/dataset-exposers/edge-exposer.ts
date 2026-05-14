@@ -27,7 +27,7 @@ export default class EdgeExposerExtension extends CanvasExtension {
               : [[exposedDataKey, edgeData[exposedDataKey]]]
 
             for (const [key, value] of datasetPairs) {
-              const stringifiedKey = key?.toString()
+              const stringifiedKey = JSON.stringify(key)
               if (!stringifiedKey) continue
 
               if (!value) {
@@ -36,10 +36,10 @@ export default class EdgeExposerExtension extends CanvasExtension {
                 if (edge.fromLineEnd?.el) delete edge.fromLineEnd.el.dataset[stringifiedKey]
                 if (edge.toLineEnd?.el) delete edge.toLineEnd.el.dataset[stringifiedKey]
               } else {
-                edge.path.display.dataset[stringifiedKey] = value.toString()
+                edge.path.display.dataset[stringifiedKey] = JSON.stringify(value)
 
-                if (edge.fromLineEnd?.el) edge.fromLineEnd.el.dataset[stringifiedKey] = value.toString()
-                if (edge.toLineEnd?.el) edge.toLineEnd.el.dataset[stringifiedKey] = value.toString()
+                if (edge.fromLineEnd?.el) edge.fromLineEnd.el.dataset[stringifiedKey] = JSON.stringify(value)
+                if (edge.toLineEnd?.el) edge.toLineEnd.el.dataset[stringifiedKey] = JSON.stringify(value)
               }
             }
         }
